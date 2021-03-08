@@ -36,36 +36,38 @@ void setup(){
   Data d;
 
   d.action="";
-  d.state=""
+  d.state="";
 
   digitalWrite(GPIO2,HIGH);
   digitalWrite(GPIO0,HIGH);
   
   while(!(d.action.equals("sendData") && d.state.equals("start"))){
+      digitalWrite(GPIO2,LOW);
+     digitalWrite(GPIO0,HIGH);
+  
   if(Serial.available()){
      incomingString = Serial.readStringUntil('\r\n');
-     Serial.flush();
+     serial_flush_buffer();
      d=readIncomingMsg(incomingString);
 
         if(d.action.equals("sendData") && d.state.equals("busy")){
           delay(100);
       value=String(d.value) + String(value);
-      Serial.println("recieveData-busy-sucess");
+      Serial.println("recieveData-busy-"+String(d.value)+"-");
       
       }
     }
+         
         
+               
     }
 
+          Serial.println(String("recieveData")+"-"+String("start")+"-"+String(d.value)+"-");
+          Serial.flush();
 
-          Serial.println(String("esp8266 action: ")+ String(d.action));
-       Serial.flush();
-       Serial.println(String("esp8266 state: ")+ String(d.state));
-       Serial.flush();
-       Serial.println(String("ESP: ")+String(value));
-       Serial.flush();
-     
+          // FALTA IMPLEMENTAR ALGO QUE CUANDO SEA SUCCESS, ENVÍE LO QUE TIENE EN d.value
 
+   
 
  
     digitalWrite(GPIO2,HIGH);
@@ -108,6 +110,10 @@ void loop() {
 
 
 
+  
+
+
+
 
 
   
@@ -138,6 +144,8 @@ void loop() {
             }else if(i==1){
               state=String(token); 
               }else if(i==2){
+                value=String(token); 
+                
               }
                token = strtok(NULL, "-"); 
               i++;
@@ -151,6 +159,12 @@ void loop() {
     return d;
     
     }
+
+      void serial_flush_buffer()
+{
+  while (Serial.read() >= 0)
+   ; // do nothing
+}
 
 
 
