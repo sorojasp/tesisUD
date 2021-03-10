@@ -51,17 +51,6 @@ void loop() {
             
             }
         
-        
- 
-       
-
-
-
-          
-
-                
-       
-
             Serial.println("supera el while....");
             Serial.flush();
   
