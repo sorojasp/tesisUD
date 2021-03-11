@@ -12,23 +12,23 @@ Ticker blinker;
  int GPIO0 =  0; 
 // Variables will change:
 boolean ledState = false;             // ledState used to set the LED
-int secondsInInterrupt=2;
+int secondsInInterrupt=1;
 
 
 void setup() {
   // put your setup code here, to run once:
 
   pinMode(GPIO2, OUTPUT);
-  pinMode(GPIO0, OUTPUT); 
+  pinMode(GPIO0, INPUT); 
   setAndLaunchinterrupt();
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  digitalWrite(GPIO0,false);
-  delay(1000*10);
-  digitalWrite(GPIO0,true);
-  delay(1000*10);
+  if(digitalRead(GPIO0)==LOW){
+    endInterrupt();
+    }
+  
 
 }
 
