@@ -99,6 +99,7 @@ String getDateTime(){
 
 
             void serial_flush_buffer(){
+           Serial.available();
               while (Serial.read() >= 0); // do nothing
               }
 
