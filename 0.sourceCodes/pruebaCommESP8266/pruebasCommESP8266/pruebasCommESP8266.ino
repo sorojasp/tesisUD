@@ -4,6 +4,7 @@
 #define led 5
 #define rstESP8266 8
 # define ledCiclo 6
+# define finishESP 7
 
 int i =0;
 int veces = 20;
@@ -26,6 +27,7 @@ void setup() {
 
   pinMode(rstESP8266, OUTPUT);
   pinMode(input,INPUT);
+  pinMode(finishESP, INPUT);
   pinMode(led,OUTPUT);
   pinMode(ledCiclo,OUTPUT);
 
@@ -53,6 +55,8 @@ void loop() {
      
 
      while(i<veces){
+
+      
         digitalWrite(ledCiclo,HIGH);
  
        Serial.print(dataSensor);
@@ -62,14 +66,17 @@ void loop() {
        incomingString =Serial.readString();
        serial_flush_buffer();
 
-       if(incomingString.equals(dataSensor)){
+
+       if(incomingString==dataSensor){
         
         digitalWrite(led,HIGH);
         
-        /*
-        Serial.print(String("t"));
+        String ok="true";
+
+        
+        Serial.print(ok);
         Serial.flush();
-        */
+        
         
       
 
@@ -79,20 +86,20 @@ void loop() {
 
           
       
-          /*
-          Serial.print(String("f"));
-          Serial.flush();
-          */
-          
-          
-          
-          
-      
+         String failed="false";
 
+        
+        Serial.print(failed);
+        Serial.flush();
+     
+          
+          
+   
           }
 
         digitalWrite(ledCiclo,LOW);
-
+        
+  while (digitalRead(finishESP)==HIGH){}
           
 
 

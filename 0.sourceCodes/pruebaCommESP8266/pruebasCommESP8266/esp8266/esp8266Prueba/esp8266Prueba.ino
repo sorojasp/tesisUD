@@ -6,7 +6,7 @@
   
 int GPIO2=2;
 int GPIO0=0;
-int counter=0;
+
 
 
 
@@ -54,9 +54,23 @@ void loop() {
     Serial.print(incomingString);
     Serial.flush();
 
+    
+
+while(Serial.available()==0){}
+
+
+digitalWrite(GPIO2,LOW);
+
+ incomingString =Serial.readString();
+       serial_flush_buffer();
+
 
      /*
      while(Serial.available()==0){}
+     digitalWrite(GPIO2,LOW);
+
+      
+
 
        incomingString =Serial.readString();
        serial_flush_buffer();
@@ -74,7 +88,7 @@ void loop() {
      */
 
 
-    digitalWrite(GPIO2,LOW);
+    
      digitalWrite(GPIO0,LOW);
 
 
@@ -92,7 +106,7 @@ void loop() {
 
 
  
-   Serial.println(counter);
+   
     
         
    
