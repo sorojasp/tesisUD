@@ -62,31 +62,18 @@ while(Serial.available()==0){}
 digitalWrite(GPIO2,LOW);
 
  incomingString =Serial.readString();
-       serial_flush_buffer();
+   serial_flush_buffer();
 
-
-     /*
-     while(Serial.available()==0){}
-     digitalWrite(GPIO2,LOW);
-
-      
-
-
-       incomingString =Serial.readString();
-       serial_flush_buffer();
-
-       
-
-     
-       if(incomingString=="t"){
+      if(incomingString=="t"){
           //digitalWrite(GPIO0,HIGH);
           }else{
      //digitalWrite(GPIO0,LOW);
      
      }
 
-     */
 
+     Serial.print("finish");
+    Serial.flush();
 
     
      digitalWrite(GPIO0,LOW);

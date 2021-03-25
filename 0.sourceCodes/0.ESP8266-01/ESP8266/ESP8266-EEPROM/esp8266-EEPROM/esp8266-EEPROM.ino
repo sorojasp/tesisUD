@@ -17,7 +17,7 @@ EEPROM.begin(512);  //Initialize EEPROM
   EEPROM.write(addr, 'C');    
  
   //Write string to eeprom
-  String sample = "?NH3=200.38&CO2=661.38&CH4=320.99&H2S=256.25&SO2=236.88&T=200.38&H=200.388";
+  String sample = "?NH3=200.38&CO2=10000.38&CH4=100000.99&H2S=100.25&SO2=236.88&T=200.38&H=200.388";
   for(int i=0;i<sample.length();i++)
   {
     EEPROM.write(0x0F+i, sample[i]); //Write one by one with starting address of 0x0F

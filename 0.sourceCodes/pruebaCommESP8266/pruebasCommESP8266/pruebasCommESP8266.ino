@@ -1,4 +1,5 @@
 
+
 #include "functions.h"
 #define input 4
 #define led 5
@@ -7,7 +8,7 @@
 # define finishESP 7
 
 int i =0;
-int veces = 20;
+int veces = 10;
 
 String incomingString;
 
@@ -45,7 +46,7 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
     String dataSensor= "&NH3=1200.38&CO2=1661.38&CH4=3120.99&H2S=2156.25&SO2=1236.88&T=1200.38&H=200.388"+String("&d=")+String(getDateTime());
-    //String dataSensor= "&A=1200.38&B=1661.38&C=3120.99&D=2156.25&E=1236.88&T=1200.38&H=200.388"+String("&d=")+String(getDateTime());
+   
   
 
      if(digitalRead(input)==LOW){
@@ -99,8 +100,11 @@ void loop() {
 
         digitalWrite(ledCiclo,LOW);
         
-  while (digitalRead(finishESP)==HIGH){}
-          
+  //while (digitalRead(finishESP)==HIGH){}
+        
+         while(Serial.available()==0){}
+       incomingString =Serial.readString();
+       serial_flush_buffer();
 
 
      i++;}
