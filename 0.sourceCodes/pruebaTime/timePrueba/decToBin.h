@@ -1,4 +1,4 @@
-byte decToBin(int num){
+byte decToBin_SR(int num){
   
   int var=num;
   switch (var) {
@@ -1281,6 +1281,10 @@ byte decToBin(int num){
   case 255:
     //do something when var equals 255
     return B11111111 ;
+  
   }
   
   }
+
+
+  

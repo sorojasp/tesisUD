@@ -1,0 +1,3 @@
+ int* probe(int number){
+
+  }
