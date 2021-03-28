@@ -53,18 +53,7 @@ void loop() {
   
   byte n = byte(1023);
 
-  int entidad[4];
-  entidad[0]=1;entidad[1]=1;entidad[2]=1;entidad[3]=1;
 
-    
-    int *data;
-    int *data2;
-    int *data3;
-    byte *data_F;
-
-
-
-    
     //data[0],data[1],data[2],data[3],data[4]= datosTratados(892,99,141,82,entidad);
     //data = datosTratados(892,99,141,82,entidad);
 
@@ -74,7 +63,6 @@ void loop() {
     //data=decToBin_10(int(80));
     
 
-    //data_F = datosTratados(int(224),99,20,41,entidad);
 
       int i=0;
 
@@ -101,8 +89,17 @@ while(countProbe<4){
   Serial.println(byte_po);
 
 
-  String prueba_stri="24771";
+  String prueba_stri="ABCDE";
   Serial.println("peso:"+String(sizeof(prueba_stri)));
+
+
+  i=0;
+  while(i<5){
+  Serial.println("bit_str "+String(i)+String(":")+String(prueba_stri.charAt(i)));
+  i++;
+  }
+
+  datosTratados(892,99,141,82,"1111");
    
  
 

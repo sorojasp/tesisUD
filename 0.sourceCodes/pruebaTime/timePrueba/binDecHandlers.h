@@ -60,108 +60,92 @@ String decToBin(int num, int cantidadBits){
   }
 
     
- void datosTratados(int enteroPromedio, int decimasPromedio, int enteroDesviacion,  int decimasDesviacion, int *entidadMedida ){
+ void datosTratados(int enteroPromedio, int decimasPromedio, int enteroDesviacion,  int decimasDesviacion, String entidadMedida ){
 
-    
     
       String binEP10=decToBin(enteroPromedio,10);
       String binDP7=decToBin(decimasPromedio,7);
       String binED10=decToBin(enteroDesviacion,10);
-      String binED7=decToBin(decimasDesviacion,10);
+      String binED7=decToBin(decimasDesviacion,7);
+      
+      
+      String bytes;
+      
+      String byte1="00000000";
+      String byte2="00000000";
+      String byte3="00000000";
+      String byte4="00000000";
+      String byte5="00000000";
 
- }
-  
-/*
- int byte1[8]={0,0,0,0,0,0,0,0};
-  int byte2[8]={0,0,0,0,0,0,0,0};
-  int byte3[8]={0,0,0,0,0,0,0,0};
-  int byte4[8]={0,0,0,0,0,0,0,0};
-  int byte5[8]={0,0,0,0,0,0,0,0};
-  
-  static byte bytes[5];
-  
-
-  binEP10=decToBin_10(int(enteroPromedio));
-  binDP7=decToBin_7(decimasPromedio);
-  binED10=decToBin_10(enteroDesviacion);
-  binDD7=decToBin_7(decimasDesviacion);
-
-  
-
-  
-
-
-  // se configura el primer byte
-  int i=0;
-  int pointer=2;
-  while(i<8){
-    byte1[i]=binEP10[pointer];
-    i++;
-    pointer++;
+      // se configura el primer byte
+      int i=0;
+      while(i<8){
+        byte1.setCharAt(i, binEP10.charAt(i));   
+        i++;
     }
 
-  // se configura el segundo byte
-  byte2[0]=binEP10[8];
-  byte2[1]=binEP10[9];
+    Serial.println("PrimerByte: "+byte1);
 
-  i=2;
-  while(i<8){
-    byte2[i]=binDP7[pointer];
-    i++;
-    pointer++;    
+    // se configura el segundo byte
+
+    byte2.setCharAt(0, binEP10.charAt(8));   
+    byte2.setCharAt(1, binEP10.charAt(9));  
+
+     i=2;
+     while(i<8){
+      byte2.setCharAt(i, binDP7.charAt(i-2));
+      i++;        
     }
 
-  // se configura el tercer byte
-  byte3[0]=binDP7[6];
+    Serial.println("SegundoByte: "+byte2);
 
-  i=1;
-  pointer=0;
-  while(i<8){
-    byte3[i]=binED10[pointer];
-    i++;
-    pointer++;
+    // se configura el tercer byte
+
+     byte3.setCharAt(0, binDP7.charAt(6));  
+
+       i=2;
+     while(i<8){
+      byte3.setCharAt(i+1, binED10.charAt(i));
+      i++;        
     }
 
-   // se configura el cuarto byte
-   byte4[0]=binED10[7];
-   byte4[1]=binED10[8];
-   byte4[2]=binED10[9];
+    Serial.println("tercerByte: "+byte3);
 
-   i=3;
-   pointer=0;
+    // se configura el cuarto byte
+     byte4.setCharAt(0, binED10.charAt(7)); 
+     byte4.setCharAt(1, binED10.charAt(8)); 
+     byte4.setCharAt(2, binED10.charAt(9)); 
 
-   while(i<8){
-    byte4[i]=binDD7[pointer];
-    i++;
-    pointer++;
+      i=3;
+     while(i<8){
+      byte4.setCharAt((i), binED7.charAt(i-3));
+      i++;        
     }
 
-    // se configura el quinto byte
-    byte5[0]=binDD7[5];
-    byte5[1]=binDD7[6];
-
-    byte5[2]=entidadMedida[0];
-    byte5[3]=entidadMedida[1];
-    byte5[4]=entidadMedida[2];
-    byte5[5]=entidadMedida[3];
-    byte5[6]=0;
-    byte5[7]=0;
-
-    //**Finalmente se configura el arreglo de bytes
     
-    bytes[0]=bin8ToByte(byte1);
-    bytes[1]=bin8ToByte(byte2);
-    bytes[2]=bin8ToByte(byte3);
-    bytes[3]=bin8ToByte(byte4);
-    bytes[4]=bin8ToByte(byte5);
+     Serial.println("cuartoByte: "+byte4);
 
+     // se configura el Quinto byte
 
-    return bytes;
     
+     byte5.setCharAt(0, binED7.charAt(5)); 
+     byte5.setCharAt(1, binED7.charAt(6)); 
+
+     byte5.setCharAt(2, entidadMedida.charAt(0)); 
+     byte5.setCharAt(3, entidadMedida.charAt(1)); 
+     byte5.setCharAt(4, entidadMedida.charAt(2)); 
+     byte5.setCharAt(5, entidadMedida.charAt(3)); 
+
+     
+     
+     Serial.println("quintoByte: "+byte5);
+
+     
+   
     
-}
+    }
 
+    
 
-
-
-*/
+ 
+  
