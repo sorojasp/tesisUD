@@ -4,8 +4,8 @@
 #include "wifiLibrary.h"
   String incomingString;
 
-  char ssid[] = "ATARA";          //  your network SSID (name)
-  char password[] = "1032406571";
+  char ssid[] = "name_wifi_network";          //  your network SSID (name)
+  char password[] = "key_wifi_network";
   char servername[]="taskcontrollersr7.herokuapp.com";
   char endPoint[]="/task/";
   
