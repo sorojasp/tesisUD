@@ -1,5 +1,15 @@
 String incomingString; // for incoming serial data
-float k_MQ4=3.6;//constant 
+float k_MQ4=4.4;//constant 
+float x1=200;
+float y1=1.8;
+float x2=1000;
+float y2=1;
+float ya=1.4;
+float xa=500;
+float m=(log10(y2) - log10(y1)) / (log10(x2) - log10(x1));
+float b = log10(ya) - (m*log10(xa));
+float Ro_clearAir=6818.18;
+
   struct SensorValues{
     
     float VRL;
@@ -53,9 +63,27 @@ void loop() {
     Serial.print("Rs: ");
     Serial.println(sensorValues.Rs);
 
-    Serial.print("Ro: ");
-    sensorValues.Ro=sensorValues.Rs/k_MQ4;
-    Serial.println(sensorValues.Ro);
+    //Serial.print("Ro: ");
+    //sensorValues.Ro=sensorValues.Rs/k_MQ4;
+    //Serial.println(sensorValues.Ro);
+
+    Serial.print("Ratio: ");
+    float Ratio=sensorValues.Rs/Ro_clearAir;
+    Serial.println(Ratio);
+
+
+
+ 
+
+    
+    Serial.print("ppm: ");
+    double ppm = pow(10, ((log10(sensorValues.Rs/Ro_clearAir)-b)/m)); //use formula to calculate ppm
+    Serial.println(ppm); //Display ppm
+
+
+
+
+    
   }
 
  
