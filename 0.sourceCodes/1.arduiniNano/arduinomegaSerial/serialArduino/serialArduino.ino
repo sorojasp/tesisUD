@@ -53,7 +53,7 @@ void loop() {
     Serial.print("adc: ");
     Serial.println(incomingString);
 
-    SensorValues sensorValues= findRs(incomingString.toInt(),5,20000);
+    SensorValues sensorValues= findRs(incomingString.toInt(),5,1000);
     
     
     Serial.print("VRL: ");
@@ -63,9 +63,13 @@ void loop() {
     Serial.print("Rs: ");
     Serial.println(sensorValues.Rs);
 
-    //Serial.print("Ro: ");
-    //sensorValues.Ro=sensorValues.Rs/k_MQ4;
-    //Serial.println(sensorValues.Ro);
+    /*
+    Serial.print("Ro: ");
+    sensorValues.Ro=sensorValues.Rs/k_MQ4;
+    Serial.println(sensorValues.Ro);
+
+
+    
 
     Serial.print("Ratio: ");
     float Ratio=sensorValues.Rs/Ro_clearAir;
@@ -79,6 +83,7 @@ void loop() {
     Serial.print("ppm: ");
     double ppm = pow(10, ((log10(sensorValues.Rs/Ro_clearAir)-b)/m)); //use formula to calculate ppm
     Serial.println(ppm); //Display ppm
+    */
 
 
 
