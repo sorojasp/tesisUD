@@ -111,11 +111,6 @@ void loop() {
 
 
   
-
-
-
-
-
   
   Data readIncomingMsg(String incomingString){
     String action;
