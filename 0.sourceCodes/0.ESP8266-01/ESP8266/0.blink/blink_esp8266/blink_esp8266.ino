@@ -1,4 +1,3 @@
-
 //#include <ESP8266WiFi.h> //Timer1 library no funciona en el ESP8266, pero ESP8266WiFi.h tiene el objeto timer1_  
 
 
@@ -13,16 +12,48 @@ void setup() {
   // put your setup code here, to run once:
 
   pinMode(GPIO2, OUTPUT);
-  pinMode(GPIO0, INPUT); 
+  pinMode(GPIO0, OUTPUT); 
+
+    digitalWrite(GPIO2, HIGH);
+   digitalWrite(GPIO0, HIGH);
+   delay(2000);
+  
+  digitalWrite(GPIO2, LOW);
+  digitalWrite(GPIO0, LOW);
+  delay(2000);
+
+  digitalWrite(GPIO2, LOW);
+  digitalWrite(GPIO0, HIGH);
+  delay(2000);
+
+  
+  digitalWrite(GPIO2, HIGH);
+  digitalWrite(GPIO0, LOW);
+  delay(2000);
+
+  
+  
   
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+
   digitalWrite(GPIO2, HIGH);
+  digitalWrite(GPIO0, HIGH);
   delay(500);
+
+  
   digitalWrite(GPIO2, LOW);
+  digitalWrite(GPIO0, LOW);
   delay(500);
+
+  
+
+  
+
+ 
+
+
   
 
 }
