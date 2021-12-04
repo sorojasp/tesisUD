@@ -8,20 +8,15 @@ void setup() {
 
   pinMode(pin0, OUTPUT);
   pinMode(pin2, OUTPUT);
-  Serial.begin(9600);
+   Serial.begin(9600);
+  serial_flush_buffer();
 
 
-  for (int i = 0; i <= 10; i++) {
+  delay(200);
 
-    digitalWrite(pin0, HIGH);
-    delay(20);
+
     
-    digitalWrite(pin0, LOW);
-    delay(100);
-
-    }
-
-    Serial.println("hi from esp8266-01");
+    Serial.write("p");
     Serial.flush();
 
   
@@ -38,3 +33,8 @@ void loop() {
 
 
 }
+
+  void serial_flush_buffer(){
+           Serial.available();
+              while (Serial.read() >= 0); // do nothing
+              }
