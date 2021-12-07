@@ -18,17 +18,19 @@ void setup() {
   pinMode(pusher,INPUT);
 
   Serial.begin(9600);
-  serial_flush_buffer();
+  Serial1.begin(9600);
+  //serial_flush_buffer();
 
   
 }
 
 void loop() {
 
-  if(digitalRead(pusher)==LOW){
+  //if(digitalRead(pusher)==LOW){
     counter++;
-    
-    delay(300);
+     Serial.begin(9600);
+     Serial1.begin(9600);
+    delay(1000);
     digitalWrite(GPIO0,HIGH);
     digitalWrite(GPIO2,HIGH);
     digitalWrite(RST,HIGH);
@@ -39,17 +41,32 @@ void loop() {
      digitalWrite(RST,HIGH);
   
 
-     while(Serial.available()==0){}
-     int incomingString =Serial.read();
-     Serial.println("incoming data:"+String(incomingString));
+     while(Serial1.available()==0){}
 
+      String incomingString =Serial1.readStringUntil('\n');
       serial_flush_buffer();
-     Serial.println("");
+      //
+     
+  
+     Serial.println(incomingString);
+     Serial.flush();
 
-     Serial.println("counter:"+String(counter));
+    Serial1.write("Hi Irene Adler");
+    Serial1.flush();
+    
+     Serial.end();
+     Serial1.end();
 
-     //Serial.println(incomingString.indexOf("hi from esp8266-01"));
+ 
 
+     //Serial.println("counter:"+String(counter));
+
+     //Serial.println(incomingString.indexOf("hi from esp8266-01,12345"));
+
+      
+      
+     
+     
       
     
        /**
@@ -64,7 +81,7 @@ void loop() {
           **/
     
        
-  }
+  //}
 
   counter=0;
 
@@ -77,6 +94,6 @@ void loop() {
     }
 
     void serial_flush_buffer(){
-                  Serial.available();
-              while (Serial.read() >= 0); // do nothing
+                  Serial1.available();
+                while (Serial1.read() >= 0); // do nothing
               }
