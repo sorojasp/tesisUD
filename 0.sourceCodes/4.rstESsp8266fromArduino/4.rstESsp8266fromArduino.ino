@@ -28,8 +28,8 @@ void loop() {
 
   //if(digitalRead(pusher)==LOW){
     counter++;
-     Serial.begin(9600);
-     Serial1.begin(9600);
+     //Serial.begin(9600);
+     //Serial1.begin(9600);
     delay(1000);
     digitalWrite(GPIO0,HIGH);
     digitalWrite(GPIO2,HIGH);
@@ -40,10 +40,10 @@ void loop() {
 
      digitalWrite(RST,HIGH);
   
-
+while(true){
      while(Serial1.available()==0){}
 
-      String incomingString =Serial1.readStringUntil('\n');
+      String incomingString =Serial1.readStringUntil('@');
       serial_flush_buffer();
       //
      
@@ -51,11 +51,23 @@ void loop() {
      Serial.println(incomingString);
      Serial.flush();
 
-    Serial1.write("Hi Irene Adler");
-    Serial1.flush();
+     if(String("Hi Irene Adler - nano")==incomingString){
+      Serial.println("=)");
+     Serial.flush();
+      
+      }else{
+        Serial.println("=(");
+        Serial.flush();
+        
+        
+        }
+     }
+
+    //Serial1.write("Hi Irene Adler");
+    //Serial1.flush();
     
-     Serial.end();
-     Serial1.end();
+     //Serial.end();
+     //Serial1.end();
 
  
 
