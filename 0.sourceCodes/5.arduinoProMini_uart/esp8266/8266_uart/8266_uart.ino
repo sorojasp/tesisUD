@@ -21,7 +21,7 @@ void setup() {
  
 
         delay(100);
-        Serial.write("Hi Irene Adler - nano@");
+        Serial.write("F=236.88&G=20.38&H=20.388&I=Dec-9-2021h10:02:18@");
         Serial.flush();
         delay(400);
         }

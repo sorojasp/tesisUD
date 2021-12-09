@@ -1,5 +1,6 @@
 
-
+  #include "functions.h"
+  
   const byte GPIO2 = 2;
   const byte GPIO0 = 3;
   const byte RST = 4;
@@ -41,17 +42,27 @@ void loop() {
      digitalWrite(RST,HIGH);
   
 while(true){
-     while(Serial1.available()==0){}
+     while(Serial.available()==0){}
 
-      String incomingString =Serial1.readStringUntil('@');
+      String incomingString =Serial.readStringUntil('@');
+      incomingString=incomingString;
       serial_flush_buffer();
       //
+
+      /*data to probe  NH3=200.38&CO2=10000.38&CH4=100000.99&H2S=100.25&SO2=236.88&T=200.38&H=200.388&t=Dec-9-2021h10:02:18
+       * 
+       * ?NH3=200.38&CO2=10000.38&CH4=100000.99&H2S=100.25@
+       * &SO2=236.88&T=200.38&H=200.388&t=Dec-9-2021h10:02:18@
+       * 
+     *A=200.38&B=10000.38&D=100000.99&E=100.25@
+     *F=236.88&G=20.38&H=20.388&I=Dec-9-2021h10:02:18@
+       */
      
   
-     Serial.println(incomingString);
+     Serial.write(incomingString.c_str()); // c_str to convet string to chart*
      Serial.flush();
 
-     if(String("Hi Irene Adler - nano")==incomingString){
+     if(String("F=236.88&G=20.38&H=20.388&I=Dec-9-2021h10:02:18")==incomingString){
       Serial.println("=)");
      Serial.flush();
       
@@ -63,7 +74,9 @@ while(true){
         }
      }
 
-    //Serial1.write("Hi Irene Adler");
+     //String msg= "Hi Irene Adler"+String("7");
+
+    //Serial1.write(msg.c_str());
     //Serial1.flush();
     
      //Serial.end();
@@ -104,7 +117,7 @@ while(true){
 
   
     }
-
+  
     void serial_flush_buffer(){
                   Serial1.available();
                 while (Serial1.read() >= 0); // do nothing
