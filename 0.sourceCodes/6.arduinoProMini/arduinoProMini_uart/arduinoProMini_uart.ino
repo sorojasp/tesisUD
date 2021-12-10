@@ -22,7 +22,7 @@ void loop() {
       Serial.flush();
 
       
-      while(Serial.available()==0){}
+      while(Serial.available()==0){};
 
       String incomingString =Serial.readStringUntil('\n');
       serial_flush_buffer();

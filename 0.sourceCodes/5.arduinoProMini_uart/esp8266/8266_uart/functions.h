@@ -58,20 +58,20 @@ Data readIncomingMsg(String incomingString){
 
 
 void serial_flush_buffer(){
-  Serial1.available();
-  while(Serial1.read() >= 0); // do nothing
+  Serial.available();
+  while (Serial.read() >= 0); // do nothing
 }
 void sendJunk(){
-  Serial1.write("junk");
-  Serial1.flush();
-  while(Serial1.available()==0){};
+  Serial.write("junk");
+  Serial.flush();
+  while(Serial.available()==0){};
   String incomingString =Serial.readStringUntil('@');
   serial_flush_buffer();
 }
 
 void recieveJunk(){
-  while(Serial1.available()==0){};
-  String incomingString =Serial1.readStringUntil('@');
+  while(Serial.available()==0){};
+  String incomingString =Serial.readStringUntil('@');
   serial_flush_buffer();
 }
 
@@ -79,37 +79,38 @@ boolean sendData(int times, String dataToSend){
 int counter=0;
 boolean dataConfirm=false;
   while(counter<times&&!dataConfirm){
-    
-    Serial1.write(String(dataToSend+"@").c_str());
-    Serial1.flush();
-    while(Serial1.available()==0){};
-    String incomingString =Serial1.readStringUntil('@');
+    Serial.write(String(dataToSend+"@").c_str());
+    Serial.flush();
+    while(Serial.available()==0){};
+    String incomingString =Serial.readStringUntil('@');
     serial_flush_buffer();
     if(incomingString==dataToSend){
-      Serial1.write("finish@");
-      Serial1.flush();
+      Serial.write("finish@");
+      Serial.flush();
       return true;
     }
+
     counter++;
+
   }
   return false;
 }
 
 String recieveData(){
-  boolean finish=false;
+   boolean finish=false;
   while(!finish){
-  while(Serial1.available()==0){};
+  while(Serial.available()==0){};
 
   //recieve data
-  String dataRecieve =Serial1.readStringUntil('@');
+  String dataRecieve =Serial.readStringUntil('@');
   serial_flush_buffer();
 
   // send data to confirm
-  Serial1.write(dataRecieve.c_str());
-  Serial1.flush();
+  Serial.write(dataRecieve.c_str());
+  Serial.flush();
   //wait for finish data
-  while(Serial1.available()==0){};
-  String incomingString =Serial1.readStringUntil('@');
+  while(Serial.available()==0){};
+  String incomingString =Serial.readStringUntil('@');
   serial_flush_buffer();
 
   if(incomingString=="finish"){
