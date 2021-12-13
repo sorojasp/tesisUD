@@ -65,7 +65,6 @@ boolean delay_millis(unsigned long delayInMillis){
     return false;
   
   
-  
   } 
 
 void serial_flush_buffer(){

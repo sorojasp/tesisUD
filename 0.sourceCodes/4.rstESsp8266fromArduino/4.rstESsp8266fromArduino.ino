@@ -23,15 +23,44 @@ void setup() {
 
 void loop() {
 
+  
+/********************************************************Probe recieve data with control time*********************************/
+      
+      boolean recieveJunkResult= recieveJunk(500UL);
+      if(recieveJunkResult==false){
+        Serial.write((String("** Junk not recieve =(")+"\n").c_str());
+        Serial.flush();
+        }else{
+           Serial.write((String("Junk recieved =)")+"\n").c_str());
+           Serial.flush();
+          }
+          
+    
+     
+    
 
-    delay(250);// this value con not be less than 200
+/********************************************************probe communication with ESP 8266*********************************/
+
+     //delay(250);// this value con not be less than 200
+    unsigned long previousTime=millis();
+    while(!(delay_millis(280UL)==true)){}
+
+     unsigned long currentTime=millis();
+
+     Serial.write((String("time in mili secunds:  ")+String(currentTime-previousTime)+"\n").c_str());
+     Serial.flush();
+
+    
     resetESP8266(RST, GPIO0, GPIO2);
 
-    delay(250);// this value con not be less than 200
+    //delay(250);// this value con not be less than 200
+   while(!(delay_millis(280UL)==true)){}
     sendJunk();
   
-
+  
     boolean resultSendData= sendData(5,"A=200.38&B=10000.38&D=100000.99&E=100.25");
+
+
 
     if(resultSendData==true){
       Serial.write((String("Envío de datos exitoso")+"\n").c_str());
@@ -58,7 +87,13 @@ void loop() {
   
  
   
-  
+
+
+
+     
+
+
+    
 
   
     }

@@ -57,6 +57,39 @@ Data readIncomingMsg(String incomingString){
 */
 
 
+boolean delay_millis(unsigned long delayInMillis){
+  /*
+   * Esta funcíon presenta un margen de error de +entre 20% para valores menores a 1000UL y de un 11% para valores 
+   * mayores a 10000UL
+  
+  */
+  unsigned long previousTime =0;
+  unsigned long currentTime =0;
+  unsigned long totalTime=0;
+  unsigned long timeLapse=0;
+  unsigned long error=2UL;
+  boolean continueInCicle=true;
+  delayInMillis=delayInMillis/error;
+  
+
+  while(continueInCicle){
+    previousTime=millis();
+     if (totalTime>= delayInMillis){
+      continueInCicle=false;
+      totalTime=0;
+      return true;
+      }
+
+       currentTime=millis();
+       timeLapse=currentTime-previousTime;
+       totalTime=totalTime+timeLapse;
+    
+    }
+    return false;
+  
+  
+  } 
+
 void serial_flush_buffer(){
   Serial1.available();
   while(Serial1.read() >= 0); // do nothing
@@ -69,10 +102,31 @@ void sendJunk(){
   serial_flush_buffer();
 }
 
-void recieveJunk(){
-  while(Serial1.available()==0){};
-  String incomingString =Serial1.readStringUntil('@');
-  serial_flush_buffer();
+boolean recieveJunk(unsigned long maxTimeWait){
+  unsigned long previousTime =0;
+  unsigned long currentTime =0;
+  unsigned long totalTime=0;
+  unsigned long timeLapse=0;
+  unsigned long error=4;
+  maxTimeWait=maxTimeWait/error;
+
+  
+  
+  while(Serial.available()==0 && totalTime<maxTimeWait){
+       previousTime=millis();
+       currentTime=millis();
+       timeLapse=currentTime-previousTime;
+       totalTime=totalTime+timeLapse;
+    };
+
+    if(totalTime<maxTimeWait){
+      String incomingString =Serial.readStringUntil('@');
+      serial_flush_buffer();
+      return true;
+      }else{
+       return false;
+        }
+  
 }
 
 boolean sendData(int times, String dataToSend){
@@ -166,9 +220,11 @@ String getDateTime(){
     digitalWrite(GPIO0,HIGH);
     digitalWrite(GPIO2,HIGH);
     digitalWrite(pinRST,HIGH);
-    delay(20);
+    //delay(20);
+    while(!(delay_millis(280UL)==true)){}
     digitalWrite(pinRST,LOW);
-    delay(100);
+    //delay(100);
+    while(!(delay_millis(280UL)==true)){}
     digitalWrite(pinRST,HIGH);
   
   
