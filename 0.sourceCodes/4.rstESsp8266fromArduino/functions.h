@@ -57,35 +57,20 @@ Data readIncomingMsg(String incomingString){
 */
 
 
-boolean delay_millis(unsigned long delayInMillis){
+boolean delay_millis(int period){
   /*
    * Esta funcíon presenta un margen de error de +entre 20% para valores menores a 1000UL y de un 11% para valores 
    * mayores a 10000UL
   
   */
-  unsigned long previousTime =0;
-  unsigned long currentTime =0;
-  unsigned long totalTime=0;
-  unsigned long timeLapse=0;
-  unsigned long error=2UL;
-  boolean continueInCicle=true;
-  delayInMillis=delayInMillis/error;
   
+     unsigned long time_now = 0;  
+     time_now = millis();
+   
+    while(millis() < time_now + period){}
 
-  while(continueInCicle){
-    previousTime=millis();
-     if (totalTime>= delayInMillis){
-      continueInCicle=false;
-      totalTime=0;
-      return true;
-      }
-
-       currentTime=millis();
-       timeLapse=currentTime-previousTime;
-       totalTime=totalTime+timeLapse;
-    
-    }
-    return false;
+    return true;
+  
   
   
   } 

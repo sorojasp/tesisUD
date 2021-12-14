@@ -4,6 +4,9 @@
   const byte GPIO0 = 3;
   const byte RST = 4;
 
+  unsigned long A = 0;  
+  unsigned long B = 0;  
+
 
 
 void setup() {
@@ -25,36 +28,38 @@ void loop() {
 
   
 /********************************************************Probe recieve data with control time*********************************/
-      
+
+      /**
       boolean recieveJunkResult= recieveJunk(500UL);
       if(recieveJunkResult==false){
-        Serial.write((String("** Junk not recieve =(")+"\n").c_str());
+        Serial.write((String("** Junk not was recieve =(")+"\n").c_str());
         Serial.flush();
         }else{
-           Serial.write((String("Junk recieved =)")+"\n").c_str());
+           Serial.write((String("Junk was recieved =)")+"\n").c_str());
            Serial.flush();
           }
           
-    
+    **/
      
     
 
 /********************************************************probe communication with ESP 8266*********************************/
 
-     //delay(250);// this value con not be less than 200
-    unsigned long previousTime=millis();
-    while(!(delay_millis(280UL)==true)){}
+    delay(250);// this value con not be less than 200
 
-     unsigned long currentTime=millis();
+    A=millis();
+    delay_millis(200);
+    B=millis();
 
-     Serial.write((String("time in mili secunds:  ")+String(currentTime-previousTime)+"\n").c_str());
-     Serial.flush();
+        Serial.write((String("time:")+String(B-A)+"\n").c_str());
+      Serial.flush();
+
 
     
     resetESP8266(RST, GPIO0, GPIO2);
 
-    //delay(250);// this value con not be less than 200
-   while(!(delay_millis(280UL)==true)){}
+    delay(250);// this value con not be less than 200
+   //while(!(delay_millis(280UL)==true)){}
     sendJunk();
   
   
@@ -64,10 +69,11 @@ void loop() {
 
     if(resultSendData==true){
       Serial.write((String("Envío de datos exitoso")+"\n").c_str());
-      
+      Serial.flush();
       }else{
         
          Serial.write((String("** Error")+"\n").c_str());
+         Serial.flush();
         
         }
 
