@@ -87,31 +87,22 @@ void sendJunk(){
   serial_flush_buffer();
 }
 
-boolean recieveJunk(unsigned long maxTimeWait){
-  unsigned long previousTime =0;
-  unsigned long currentTime =0;
-  unsigned long totalTime=0;
-  unsigned long timeLapse=0;
-  unsigned long error=4;
-  maxTimeWait=maxTimeWait/error;
+boolean recieveJunk(int period){
 
-  
-  
-  while(Serial.available()==0 && totalTime<maxTimeWait){
-       previousTime=millis();
-       currentTime=millis();
-       timeLapse=currentTime-previousTime;
-       totalTime=totalTime+timeLapse;
-    };
+  unsigned long time_now = 0;  
+  time_now = millis();
 
-    if(totalTime<maxTimeWait){
-      String incomingString =Serial.readStringUntil('@');
-      serial_flush_buffer();
-      return true;
-      }else{
-       return false;
-        }
+  while(Serial.available()==0 && millis() < time_now + period){};
+
+  if(millis() < time_now + period){
+    String incomingString =Serial.readStringUntil('@');
+          serial_flush_buffer();
+          return true;
+    
   
+    }else{
+      return false;
+      }
 }
 
 boolean sendData(int times, String dataToSend){

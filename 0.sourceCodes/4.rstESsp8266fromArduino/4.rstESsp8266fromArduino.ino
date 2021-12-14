@@ -29,8 +29,8 @@ void loop() {
   
 /********************************************************Probe recieve data with control time*********************************/
 
-      /**
-      boolean recieveJunkResult= recieveJunk(500UL);
+      
+      boolean recieveJunkResult= recieveJunk(500);
       if(recieveJunkResult==false){
         Serial.write((String("** Junk not was recieve =(")+"\n").c_str());
         Serial.flush();
@@ -39,7 +39,7 @@ void loop() {
            Serial.flush();
           }
           
-    **/
+    
      
     
 
