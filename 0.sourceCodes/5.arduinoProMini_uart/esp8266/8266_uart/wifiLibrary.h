@@ -2,17 +2,6 @@
 #include <ESP8266HTTPClient.h>
 #include <string.h>
 
-  
-  struct concentracionesSensores{
-    
-    float NH3;
-    float CO2;
-    float CH4;
-    float H2S;
-    float SO2;
-    float temperatura;
-    float humedad;
-  };
 
 
 boolean connectToWifiNetwork(String wifiNetworkName, String password){
@@ -42,7 +31,7 @@ boolean connectToWifiNetwork(String wifiNetworkName, String password){
   
   //tutorial del Json en arduino https://randomnerdtutorials.com/decoding-and-encoding-json-with-arduino-or-esp8266/
 
-     String queryString = "?Authorization="+String(cs.NH3)+"&co2="+String(cs.SO2)+"&so2="+String(cs.CO2);
+     String queryString = "?Authorization="+String("holi")+String("&NH3=")+String(cs.NH3)+String("&CO2=")+String(cs.CO2)+String("&CH4=")+String(cs.CH4)+String("&H2S=")+String(cs.H2S)+String("&SO2=")+String(cs.SO2)+String("&temperatura=")+String(cs.temperatura)+String("&humedad=")+String(cs.humedad)+String("&date=")+cs.date;
 
      //String queryString=value;
      if (client.connect(serverName, port)) {

@@ -93,6 +93,9 @@ void loop() {
         }
 
 
+         delay_millis(500);
+
+
 
 
 

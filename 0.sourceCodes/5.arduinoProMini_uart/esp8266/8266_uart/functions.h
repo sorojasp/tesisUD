@@ -1,5 +1,20 @@
 
 
+  
+  struct concentracionesSensores{
+    
+    float NH3;
+    float CO2;
+    float CH4;
+    float H2S;
+    float SO2;
+    float temperatura;
+    float humedad;
+    String date;
+  };
+
+
+
 boolean delay_millis(int period){
   /*mAKE A DELAY in milliseconds usings the millis() function
    * @period is the delay what you want in milliseconds
