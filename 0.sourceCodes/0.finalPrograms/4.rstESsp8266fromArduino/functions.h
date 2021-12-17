@@ -1,12 +1,5 @@
+
 /*
-struct Data{
-
-  String action;
-  String state;
-  String value;
-
-  };
-
 Data readIncomingMsg(String incomingString){
     String action;
     String value;
@@ -54,14 +47,12 @@ Data readIncomingMsg(String incomingString){
     return d;
 
     }
+
 */
 
-
 boolean delay_millis(int period){
-  /*
-   * Esta funcíon presenta un margen de error de +entre 20% para valores menores a 1000UL y de un 11% para valores
-   * mayores a 10000UL
-
+  /*mAKE A DELAY in milliseconds usings the millis() function
+   * @period is the delay what you want in milliseconds
   */
 
      unsigned long time_now = 0;
@@ -75,82 +66,8 @@ boolean delay_millis(int period){
 
   }
 
-void serial_flush_buffer(){
-  Serial1.available();
-  while(Serial1.read() >= 0); // do nothing
-}
-void sendJunk(){
-  Serial1.write("junk");
-  Serial1.flush();
-  while(Serial1.available()==0){};
-  String incomingString =Serial1.readStringUntil('@');
-  serial_flush_buffer();
-}
-
-boolean recieveJunk(int period){
-
-  unsigned long time_now = 0;
-  time_now = millis();
-
-  while(Serial1.available()==0 && millis() < time_now + period){};
-
-  if(millis() < time_now + period){
-    String incomingString =Serial1.readStringUntil('@');
-          serial_flush_buffer();
-          return true;
 
 
-    }else{
-      return false;
-      }
-}
-
-boolean sendData(int times, String dataToSend){
-int counter=0;
-boolean dataConfirm=false;
-  while(counter<times&&!dataConfirm){
-
-    Serial1.write(String(dataToSend+"@").c_str());
-    Serial1.flush();
-    while(Serial1.available()==0){};
-    String incomingString =Serial1.readStringUntil('@');
-    serial_flush_buffer();
-    if(incomingString==dataToSend){
-      Serial1.write("finish@");
-      Serial1.flush();
-      return true;
-    }
-    counter++;
-  }
-  return false;
-}
-
-String recieveData(){
-  boolean finish=false;
-  while(!finish){
-  while(Serial1.available()==0){};
-
-  //recieve data
-  String dataRecieve =Serial1.readStringUntil('@');
-  serial_flush_buffer();
-
-  // send data to confirm
-  Serial1.write(dataRecieve.c_str());
-  Serial1.flush();
-  //wait for finish data
-  while(Serial1.available()==0){};
-  String incomingString =Serial1.readStringUntil('@');
-  serial_flush_buffer();
-
-  if(incomingString=="finish"){
-    finish=true;
-    return dataRecieve;
-  }else{
-    return "false@";
-    }
-
-  }
-}
 
 String getDateTime(){
 
