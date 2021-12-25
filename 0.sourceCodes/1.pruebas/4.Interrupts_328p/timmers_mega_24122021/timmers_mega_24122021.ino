@@ -2,11 +2,18 @@
 
 volatile byte ledState = LOW;
 volatile unsigned int cuenta = 0;
-boolean toggle0 = 0;
-boolean toggle2 = 0;
-int pinLed=9;
+
+int pinLed=13;
+int pulser=2;
+int cable=3;
 
 void setup() {
+
+  pinMode(pinLed, OUTPUT);
+  pinMode(pulser,INPUT);
+  pinMode(cable,INPUT);
+  
+  
 
    SREG = (SREG & 0b01111111); //Desabilitar interrupciones
 
@@ -24,6 +31,31 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
 
+  if(digitalRead(pulser)==LOW){
+     TIMSK2 = TIMSK2&0b11111110;
+    }
+
+    
+  if(digitalRead(cable)==LOW){
+  
+      TIMSK2 = TIMSK2|0b00000001;
+     
+     
+      
+      
+      
+            
+        
+
+
+    
+    
+    
+    }
+
+
+  
+
 }
 
 
@@ -34,9 +66,9 @@ ISR(TIMER2_OVF_vect){
 
      ledState=!ledState;
 
-      digitalWrite(13,ledState);
+      digitalWrite(pinLed,ledState);
       cuenta=0;
-       TCNT1 = 0xC2F7;              
+                 
 
     }
  
