@@ -6,7 +6,7 @@
 SoftwareSerial mySerial(2, 3); // RX, TX
 
 const byte start_uart_comm = 4;
-
+const byte recieve_data=7;
 volatile byte stateLed = LOW;
 const byte pinLed = 9;
 const byte pinLed_2 = 8;
@@ -27,6 +27,7 @@ void setup() {
    pinMode(pinLed_2, OUTPUT);
    pinMode(enableInterruption, INPUT);
    pinMode(disableInterruption, INPUT);
+   pinMode(recieve_data, OUTPUT);
 
    //enable interruption timmer 2
     SREG = (SREG & 0b01111111); //Desabilitar interrupciones
@@ -77,8 +78,9 @@ boolean sendDataSoftwareSerial(String str){
     }
 
      //clear serial buffer
-     mySerial.available();
-     while(mySerial.read() >= 0);
+        mySerial.flush();
+     //mySerial.available();
+     //while(mySerial.read() >= 0);
 
      return true;
  
@@ -86,12 +88,42 @@ boolean sendDataSoftwareSerial(String str){
 
   void sendData(){
 
+
+   
+    String incomingMsg;
+    digitalWrite(start_uart_comm,LOW);
+    
+   
+    digitalWrite(recieve_data, HIGH);
+
+    while(mySerial.available()<=0){}
+    
+
+    if(mySerial.available()>0){
+    incomingMsg=String(mySerial.read())+incomingMsg;
+
+    }
+   
+ 
+     //CLEAR SERIAL PORT
+     mySerial.available();
+     while(mySerial.read() >= 0);
+
+     digitalWrite(recieve_data, LOW);
+
+    
+
+     
+    
+     
+    
+
      digitalWrite(start_uart_comm,HIGH);
 
      //delay_millis(100);
 
 
-     sendDataSoftwareSerial(String(analogRead(A0)));
+     sendDataSoftwareSerial(String(incomingMsg)+String("-")+String(analogRead(A0)));
 
 
      digitalWrite(start_uart_comm,LOW);
@@ -117,6 +149,9 @@ boolean sendDataSoftwareSerial(String str){
 
     
 ISR(TIMER2_OVF_vect){
+
+
+  
 
   cuenta++;
     if(cuenta > 29) {
