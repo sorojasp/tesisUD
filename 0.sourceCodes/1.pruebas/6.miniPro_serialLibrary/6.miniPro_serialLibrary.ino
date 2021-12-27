@@ -38,10 +38,10 @@ void setup() {
 
    Timer1.initialize(3000000);
    Timer1.attachInterrupt(sendData);
-   
-   //**sleep_enable();  
 
-    
+   //**sleep_enable();
+
+
 
 }
 
@@ -52,7 +52,7 @@ void loop() {
      digitalWrite(pinLed_2, HIGH);
     }
 
-    
+
   if(digitalRead(enableInterruption)==LOW){
     TIMSK2 = TIMSK2|0b00000001;
      }
@@ -61,13 +61,13 @@ void loop() {
 
 
 
-  
+
 
 }
 
 boolean sendDataSoftwareSerial(String str){
 
-     int str_len = str.length() + 1; 
+     int str_len = str.length() + 1;
      char char_array[str_len];
      str.toCharArray(char_array, str_len);
 
@@ -83,40 +83,33 @@ boolean sendDataSoftwareSerial(String str){
      //while(mySerial.read() >= 0);
 
      return true;
- 
+
   }
 
-  void sendData(){
+void sendData(){
 
-
-   
     String incomingMsg;
     digitalWrite(start_uart_comm,LOW);
-    
-   
+
+
     digitalWrite(recieve_data, HIGH);
 
-    while(mySerial.available()<=0){}
-    
+
 
     if(mySerial.available()>0){
     incomingMsg=String(mySerial.read())+incomingMsg;
 
     }
-   
- 
+
+
      //CLEAR SERIAL PORT
      mySerial.available();
      while(mySerial.read() >= 0);
 
      digitalWrite(recieve_data, LOW);
 
-    
 
-     
-    
-     
-    
+
 
      digitalWrite(start_uart_comm,HIGH);
 
@@ -130,14 +123,14 @@ boolean sendDataSoftwareSerial(String str){
 
      //delay_millis(100);
 
-    
-    
+
+
     }
 
 
-    void blinkLed(){
-     
-     
+void blinkLed(){
+
+
 
       stateLed=!stateLed;
       digitalWrite(pinLed,stateLed);
@@ -147,11 +140,11 @@ boolean sendDataSoftwareSerial(String str){
 
 
 
-    
+
 ISR(TIMER2_OVF_vect){
 
 
-  
+
 
   cuenta++;
     if(cuenta > 29) {
@@ -160,12 +153,8 @@ ISR(TIMER2_OVF_vect){
 
       digitalWrite(pinLed,ledState);
       cuenta=0;
-                 
+
 
     }
- 
+
 }
-
-
-
-    
