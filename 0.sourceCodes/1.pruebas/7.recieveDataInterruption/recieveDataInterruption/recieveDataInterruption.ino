@@ -2,9 +2,14 @@
 #include<TimerOne.h>
 SoftwareSerial mySerial(10, 3); // RX, TX
 
+const byte pinLed = 13;
+const byte pulser=12;
+volatile byte ledState = LOW;
+volatile unsigned int cuenta = 0;
 
 volatile boolean flag=false;
 volatile String s;
+char myChar;
 void setup() {
   // put your setup code here, to run once:
 
@@ -14,8 +19,17 @@ void setup() {
   Serial1.begin(9600);
   mySerial.begin(9600);
 
-   Timer1.initialize(100);
-   Timer1.attachInterrupt(recieveData);
+
+  pinMode(pinLed,OUTPUT);
+  pinMode(pulser,INPUT);
+
+    SREG = (SREG & 0b01111111); //Desabilitar interrupciones
+    TIMSK2 = TIMSK2|0b00000001; //Habilita la interrupcion por desbordamiento
+    TCCR2B = 0b00000111; //Configura preescala para que FT2 sea de 7812.5Hz
+    SREG = (SREG & 0b01111111) | 0b10000000; //Habilitar interrupciones //Desabilitar interrupciones
+
+   Timer1.initialize(2000000);
+   Timer1.attachInterrupt(blinkLed);
 
 
   
@@ -25,13 +39,17 @@ void setup() {
 void loop() {
 
 
-  if(flag==true){
+  if(flag==true && s!=""){
+    Timer1.stop();
+    s.trim();
     Serial.write(s.c_str());
        Serial.flush();
        s="";
        Serial.write("\n");
        Serial.flush();
-  
+
+       flag==false;
+       Timer1.restart();  
 }
   
 
@@ -50,31 +68,55 @@ void recieveData(){
 
 
 
-    char myChar;
+    
     String incomingMsg ;
     flag=false;
 
-    if(mySerial.available()!=0){
+    //while(mySerial.available()==0){}
+
+
+
+    if(mySerial.available()>0){
       incomingMsg=mySerial.read();
 
       int suma=incomingMsg.toInt()+0;
       myChar = suma;
       s.concat(String(myChar));
-      if(!(s.indexOf('@',0)!=-1)){
-        s.concat("*");
+      
+      }
+
+      if(myChar=='@'){
+        flag=true;
         
         }
 
-        flag=true;
-      
-      }
-      //}
+  
+  }
 
-      
 
-      
 
-   
+  ISR(TIMER2_OVF_vect){
 
+  cuenta++;
+    if(cuenta > 29) {
+
+     ledState=!ledState;
+
+      //digitalWrite(pinLed,ledState);
+      cuenta=0;
+
+
+    }
+
+}
+
+void blinkLed(){
+
+  digitalWrite(pinLed,LOW);
+  while(digitalRead(pulser)==LOW){}
+  //while(cuenta<25){}
+  digitalWrite(pinLed,HIGH);
+ 
+  
   
   }

@@ -1,5 +1,5 @@
 const byte sendData=8;
-
+int i=0;
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
@@ -10,8 +10,9 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
+  
+  
   /*
-  int i=0;
   if(digitalRead(sendData)==LOW){
     delay(200);
     sendDataSoftwareSerial(String("Stiven@"+String(i)));
@@ -20,8 +21,9 @@ void loop() {
 
     */
 
-    delay(1000);
-    sendDataSoftwareSerial(String("Stiven@"));
+    delay(200);
+    sendDataSoftwareSerial("Stiven@-"+String(i));
+    i++;
 
     
   
@@ -40,7 +42,7 @@ boolean sendDataSoftwareSerial(String str){
 
      for(int i =0; i < strlen(char_array); i++ ) {
       char c = char_array[i];
-      delay(10);
+      delay(50);
       Serial.write(c);
     }
 
