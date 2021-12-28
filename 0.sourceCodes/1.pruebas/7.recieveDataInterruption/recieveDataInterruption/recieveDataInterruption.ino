@@ -113,8 +113,8 @@ void recieveData(){
 void blinkLed(){
 
   digitalWrite(pinLed,LOW);
-  while(digitalRead(pulser)==LOW){}
-  //while(cuenta<25){}
+  //while(digitalRead(pulser)==LOW){}
+  while(cuenta<25){};
   digitalWrite(pinLed,HIGH);
  
   
