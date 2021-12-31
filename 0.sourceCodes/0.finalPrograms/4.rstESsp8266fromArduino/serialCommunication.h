@@ -108,7 +108,7 @@ String recieveData(int period){
    */
 
   boolean finish=false;
-  while(!finish){// maybe i can change the finist by a times control...
+  while(!finish){// maybe i can change the finish by a times control...
 
   unsigned long time_now = 0;
   time_now = millis();
