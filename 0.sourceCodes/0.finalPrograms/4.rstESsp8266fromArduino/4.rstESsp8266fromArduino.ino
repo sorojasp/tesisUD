@@ -41,11 +41,6 @@ void loop() {
           }
 
 
-
-
-
-
-
 /********************************************************probe communication with ESP 8266*********************************/
 
     //delay(250);// this value con not be less than 200
