@@ -32,7 +32,7 @@ void setup() {
 
        concentracionesSensores cs = {280.3, 78.36, 74.74, 85.4, 41.85, 20.8, 96.63, "Dec-9-2021h10:02:18" };
        WiFiClient client;
-       sendSensorData(String(servername), String(endPoint), 80, cs, client);
+       sendSensorData(String(servername), String(endPoint), 80, dataRecieved, client);
 
     }
 

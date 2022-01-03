@@ -14,10 +14,36 @@ void setup() {
   // put your setup code here, to run once:
 
     Serial.begin(9600);
-    boolean resultRecieveJunk=recieveJunk(2000);
-    if (resultRecieveJunk==true){
-      boolean resultSendJunk=sendJunk(2000);
-      if(resultSendJunk==true){
+
+    delay_millis(300);
+
+     boolean resultSendJunk=sendJunk(5000);
+
+       if(connectToWifiNetwork(String(ssid), String(password))){
+                  WiFiClient client;
+                  sendSensorData(String(servername), String(endPoint), 80, "&A=200.38&B=10000.38&D=100000.99&E=100.25", client);
+                  }
+                  
+      
+
+    
+    if (resultSendJunk==true){
+
+      boolean resultRecieveJunk=recieveJunk(5000);
+
+
+       
+      
+
+      
+       
+      if(resultRecieveJunk==true){
+      
+      
+      
+             
+      
+      /*
           String A=recieveData(2000);
           if(A!="false@"){
             String B=recieveData(2000);
@@ -30,11 +56,15 @@ void setup() {
                   ESP.deepSleep(0);
        
               }else{}
-            }else{}        
-        }else{}
+            }else{} 
+
+        */ 
+        }else{} 
+        
     }else{}
-  
-  String dataRecieved=recieveData(2000);
+    
+  ESP.deepSleep(0);
+  //String dataRecieved=recieveData(2000);
 
 }
 

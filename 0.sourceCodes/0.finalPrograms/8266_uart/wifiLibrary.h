@@ -25,13 +25,14 @@ boolean connectToWifiNetwork(String wifiNetworkName, String password){
  }
 
 
- boolean sendSensorData(String serverName, String endPoint, int port,  struct concentracionesSensores  cs, WiFiClient client){
+ 
+ boolean sendSensorData(String serverName, String endPoint, int port,  String dataSensors, WiFiClient client){
         
  
   
   //tutorial del Json en arduino https://randomnerdtutorials.com/decoding-and-encoding-json-with-arduino-or-esp8266/
 
-     String queryString = "?Authorization="+String("holi")+String("&NH3=")+String(cs.NH3)+String("&CO2=")+String(cs.CO2)+String("&CH4=")+String(cs.CH4)+String("&H2S=")+String(cs.H2S)+String("&SO2=")+String(cs.SO2)+String("&temperatura=")+String(cs.temperatura)+String("&humedad=")+String(cs.humedad)+String("&date=")+cs.date;
+     String queryString = "?Authorization="+String("holi")+String(dataSensors);
 
      //String queryString=value;
      if (client.connect(serverName, port)) {

@@ -1,12 +1,19 @@
 #include "functions.h"
 #include "serialCommunication.h"
 
-  const byte GPIO2 = 2;
-  const byte GPIO0 = 3;
-  const byte RST = 4;
+  const byte GPIO2 = 8;
+  const byte GPIO0 = 7;
+  const byte RST = 9;
 
   unsigned long A = 0;
   unsigned long B = 0;
+
+    /* 
+   *  Set of pin to indicate when the process is ok or present errors
+  */
+
+  const byte is_ok = 5;
+  const byte present_errors = 6;
 
 
 

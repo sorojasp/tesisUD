@@ -24,6 +24,10 @@ boolean sendJunk(int period){
   if(millis() < time_now + period){
     String incomingString =Serial1.readStringUntil('@');
     Serial1_flush_buffer();
+                //***///
+      Serial.write(String("** from ESP: "+incomingString+"\n").c_str());
+      Serial.flush();
+      //***///
     return true;
 
   }else{
@@ -52,6 +56,10 @@ boolean recieveJunk(int period){
   if(millis() < time_now + period){
     String incomingString =Serial1.readStringUntil('@');
           Serial1_flush_buffer();
+               //***///
+      Serial.write(String("** from ESP: "+incomingString+"\n").c_str());
+      Serial.flush();
+      //***///
           return true;
     }else{
       return false;
