@@ -3,6 +3,36 @@ void Serial1_flush_buffer(){
   while(Serial1.read() >= 0); // do nothing
 }
 
+
+String waitForData(unsigned long time_wait){
+
+    // first have to clear of serial buffer of input
+    Serial1_flush_buffer();
+
+    unsigned long count_time = 0;
+    unsigned long A = 0;
+    unsigned long B = 0;
+
+    while(Serial1.available()==0 && count_time<time_wait){
+      A=millis();
+      B=millis();
+      count_time=count_time+(B-A);
+      }
+
+      if(count_time<time_wait){
+          String incomingString =Serial1.readStringUntil('@');
+          Serial1_flush_buffer();
+          return incomingString;
+        
+        }else{
+          return "false@";
+                    
+          }
+
+ 
+
+}
+
 boolean sendJunk(int period){
 
   /**

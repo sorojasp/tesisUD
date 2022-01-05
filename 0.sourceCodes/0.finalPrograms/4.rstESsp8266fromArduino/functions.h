@@ -50,20 +50,22 @@ Data readIncomingMsg(String incomingString){
 
 */
 
-boolean delay_millis(int period){
+void delay_millis(unsigned long time_wait){
   /*mAKE A DELAY in milliseconds usings the millis() function
    * @period is the delay what you want in milliseconds
   */
 
-     unsigned long time_now = 0;
-     time_now = millis();
-
-    while(millis() < time_now + period){}
-
-    return true;
 
 
+    unsigned long count_time = 0;
+    unsigned long A = 0;
+    unsigned long B = 0;
 
+    while(count_time<time_wait){
+      A=millis();
+      B=millis();
+      count_time=count_time+(B-A);
+    }
   }
 
 

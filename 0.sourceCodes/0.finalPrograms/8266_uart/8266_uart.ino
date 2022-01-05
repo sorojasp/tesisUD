@@ -21,30 +21,53 @@ void setup() {
 
   Serial.begin(9600);
 
-  boolean resultRecieveJunk=recieveJunk(2000);
-
-  if(resultRecieveJunk==true){
-
-    
-  String dataRecieved=recieveData(2000);
-
-  sendData(2,"Hi from ESP8266 =)",2000);
-
-  delay(100);
-
-   if(connectToWifiNetwork(String(ssid), String(password))){
-       WiFiClient client;
-       sendSensorData(String(servername), String(endPoint), 80, dataRecieved, client);
-
-    }
-
-
-  ESP.deepSleep(0);
-    
-    }
-
+  Serial.print("junk@");
+  Serial.flush();
 
   
+  
+  String data= waitForData(10000);
+
+  
+
+  if(data!="false@"){
+
+      delay(100);///////////*  Is very important  **///
+      Serial.print("xddata1 recieved@");
+      Serial.flush();
+
+      
+      String data2= waitForData(10000);
+
+
+    
+
+    if(connectToWifiNetwork(String(ssid), String(password))){
+               WiFiClient client;
+               sendSensorData(String(servername), String(endPoint), 80, data+data2, client);
+               }
+
+  }else{
+
+    if(connectToWifiNetwork(String(ssid), String(password))){
+               WiFiClient client;
+               sendSensorData(String(servername), String(endPoint), 80, "&A=NolleganDatos", client);
+               }
+  }
+
+
+  Serial.print("data sended@");
+  Serial.flush();
+
+
+
+
+
+
+
+
+ESP.deepSleep(0);
+
 
 
 
