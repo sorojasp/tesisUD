@@ -33,60 +33,6 @@ String waitForData(unsigned long time_wait){
 
 }
 
-boolean sendJunk(int period){
-
-  /**
-   * Function to send junk, the period is the  maximun time that the function wait for response,
-   * is in this lapse of time not recieve confirmation, the function will return false. And if the function recieve
-   * confirmation before that the period is finish, then return true
-   *
-   *@period = time that wait for response
-   */
-
-  Serial1.write("junk@");
-  Serial1.flush();
-
-  unsigned long time_now = 0;
-  time_now = millis();
-
-  while(Serial1.available()==0 && millis() < time_now + period){};
-
-  if(millis() < time_now + period){
-    String incomingString =Serial1.readStringUntil('@');
-    Serial1_flush_buffer();
-    return true;
-
-  }else{
-    return false;
-
-
-  }
-
-
-}
-
-boolean recieveJunk(int period){
-  /**
-   * Function to recieve junk, the period is the  maximun time that the function wait for response,
-   * is in this lapse of time not recieve confirmation, the function will return false. And if the function recieve
-   * confirmation before that the period is finish, then return true
-   *
-   *@period = time that wait for response
-   */
-
-  unsigned long time_now = 0;
-  time_now = millis();
-
-  while(Serial1.available()==0 && millis() < time_now + period){};
-
-  if(millis() < time_now + period){
-    String incomingString =Serial1.readStringUntil('@');
-          Serial1_flush_buffer();
-          return true;
-    }else{
-      return false;
-      }
-}
 
 boolean sendData(int times, String dataToSend, int period){
 
@@ -105,15 +51,9 @@ boolean sendData(int times, String dataToSend, int period){
 
     Serial1.write(String(dataToSend+"@").c_str());
     Serial1.flush();
-
-      unsigned long time_now = 0;
-      time_now = millis();
-
-    while(Serial1.available()==0 && millis() < time_now + period){};
-
-     if(millis() < time_now + period){
-      String incomingString =Serial1.readStringUntil('@');
-      Serial1_flush_buffer();
+      
+    String incomingString = waitForData(10000);
+      
 
       if(incomingString==dataToSend){
         Serial1.write("finish@");

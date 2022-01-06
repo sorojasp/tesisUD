@@ -36,28 +36,26 @@ void setup() {
       Serial.print("xddata1 recieved@");
       Serial.flush();
 
-      
       String data2= waitForData(10000);
 
+      if(data2!="false@"){
 
-    
-
-    if(connectToWifiNetwork(String(ssid), String(password))){
+        if(connectToWifiNetwork(String(ssid), String(password))){
                WiFiClient client;
                sendSensorData(String(servername), String(endPoint), 80, data+data2, client);
                }
 
-  }else{
+               Serial.print("data sended@");
+              Serial.flush();
+        
+        
+        }else{}
+        
+        
+    }else{}
 
-    if(connectToWifiNetwork(String(ssid), String(password))){
-               WiFiClient client;
-               sendSensorData(String(servername), String(endPoint), 80, "&A=NolleganDatos", client);
-               }
-  }
 
-
-  Serial.print("data sended@");
-  Serial.flush();
+  
 
 
 

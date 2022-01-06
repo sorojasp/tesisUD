@@ -61,7 +61,7 @@ void loop() {
            Serial.println(incomingString);
            Serial.flush();
 
-           if(incomingString=="xddata1 recieved@"){
+           if(incomingString=="xddata1 recieved"){
              Serial.println("=)");
            Serial.flush();
             
