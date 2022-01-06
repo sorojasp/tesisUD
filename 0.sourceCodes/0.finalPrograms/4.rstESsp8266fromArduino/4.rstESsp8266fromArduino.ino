@@ -38,63 +38,63 @@ void loop() {
     resetESP8266(RST, GPIO0, GPIO2);
     delay_millis(250);// this value con not be less than 200
 
-
-
-
   
-        String incomingString;
+    String incomingString;
 
-       
+    Serial1_flush_buffer();// ** important because clear the serial port after recieve the junk from ESP8266-01
 
-        Serial1_flush_buffer();
+    unsigned long time_wait=10000;
 
-        
+    boolean dataRecieved= sendData(2, "&A=200.38&B=10000.38&D=100000.99&E=100.25",time_wait);
 
-        Serial1.println("&A=200.38&B=10000.38&D=100000.99&E=100.25@");
-         Serial1.flush();
+    if(dataRecieved==true){
 
-          unsigned long time_wait=120000;
-          
-          
-          incomingString=waitForData(time_wait);
+      Serial.println("data Recieved =)");
+      Serial.flush();
 
-           Serial.println(incomingString);
-           Serial.flush();
+      delay(200);
 
-           if(incomingString=="xddata1 recieved"){
-             Serial.println("=)");
-           Serial.flush();
-            
-            
-            }else{
+      dataRecieved= sendData(2, "F=236.88&G=20.38&H=20.388&I=Dec-9-2021h10:02:18",time_wait);
 
-               Serial.println("** =(");
-           Serial.flush();
-              
-              
-              }
+      if(dataRecieved==true){
 
-           
-           Serial1.println("&F=236.88&G=20.38&H=20.388&I="+getDateTime()+"@");
-           Serial1.flush();
-         
- 
-           incomingString=waitForData(time_wait);
-            
-        
-          
-
-          
-
-          
-
-        
-        
-
-        Serial.println(incomingString);
+        String data_to_server= recieveData(time_wait);
+        Serial.println(data_to_server);
         Serial.flush();
 
-    
+        data_to_server= recieveData(time_wait);
+        Serial.println(data_to_server);
+        Serial.flush();
+
+        data_to_server= recieveData(time_wait);
+        Serial.println(data_to_server);
+        Serial.flush();
+        
+        
+        }else{
+          
+         Serial.println("**  Error to send data 2 not  Recieved =(");
+         Serial.flush();
+        
+          }
+
+
+      
+      
+      
+      }else{
+
+        Serial.println("**  Error data not  Recieved =(");
+         Serial.flush();
+        
+        
+        
+        }
+
+        
+
+        
+
 
 
 

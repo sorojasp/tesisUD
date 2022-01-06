@@ -34,11 +34,11 @@ String waitForData(unsigned long time_wait){
 }
 
 
-boolean sendData(int times, String dataToSend, int period){
+boolean sendData(int times, String dataToSend, unsigned long time_wait){
 
     /**
    * Function to send data for Serial1 port, the idea is try to send data many @times and wait for respond usign @period for each time to try to do it.
-   *@period = Time that wait for response.. in each time
+   *@time_wait = Time that wait for response.. in each time
    *@times= Times that try send the data
    *@dataTosend= The data to send have be in string
    */
@@ -49,29 +49,57 @@ boolean sendData(int times, String dataToSend, int period){
 
   while(counter<times&&!dataConfirm){
 
-    Serial1.write(String(dataToSend+"@").c_str());
+    Serial1.println(dataToSend+"@");
     Serial1.flush();
-      
-    String incomingString = waitForData(10000);
-      
 
+    String incomingString = waitForData(time_wait);
+       /*
+       Serial.println("incomingString: "+incomingString+"**"); //just for test
+       Serial.flush();//just for test
+       
+       Serial.println("length incoming: "+String(incomingString.length()));//just for test
+       Serial.flush();//just for test
+
+       Serial.println("dataToSend: "+dataToSend+"**"); //just for test
+       Serial.flush();//just for test
+       
+       Serial.println("length dataToSend: "+String(dataToSend.length()));//just for test
+       Serial.flush();//just for test
+
+       boolean test= incomingString==dataToSend;//just for test
+
+       if(incomingString!=dataToSend){//just for test
+
+        Serial.println("**No son iguales =(");//just for test
+        
+        }else{//just for test
+          Serial.println("Son iguales =)");//just for test
+          
+          }//just for test
+
+         */
+
+       
+
+
+ 
+      
+      delay(200);// with out this delay, not works......
       if(incomingString==dataToSend){
-        Serial1.write("finish@");
+        Serial1.println("finish@");
         Serial1.flush();
         return true;
         }
-        }else{
-          //pass
-          }
+        
 
     counter++;
   }
   return false;
 }
 
-String recieveData(int period){
+String recieveData(unsigned long time_wait){
 
-      /**
+   /**
    * Function to .....recieve data, period is the maximum time to recieve data and is the same time to wait for the confirmation, is this period is over and
    * no recieve response, the function will returns 'false@' to indicate that not recieve response
    *@period = Time that wait for response.. in each time
@@ -80,48 +108,27 @@ String recieveData(int period){
   boolean finish=false;
   while(!finish){// maybe i can change the finish by a times control...
 
-  unsigned long time_now = 0;
-  time_now = millis();
-  String dataRecieve;
+  String dataRecieve=waitForData(time_wait);
 
-    //recieve data
-  while(Serial1.available()==0 && millis() < time_now + period){};
+  //Serial.println("wait for data: "+dataRecieve);
+  //Serial.flush();
 
-  if(millis() < time_now + period){
-      dataRecieve =Serial1.readStringUntil('@');
-      Serial1_flush_buffer();
-
-    }else{
-      return "false@";
-      }
-
-  // send data to confirm
-  Serial1.write(dataRecieve.c_str());
-  Serial1.flush();
-
-  //wait for finish data
-
-  time_now = 0;
-  time_now = millis();
-  String incomingString;
-  while(Serial1.available()==0 && millis() < time_now + period){};
-
-    if(millis() < time_now + period){
-      incomingString =Serial1.readStringUntil('@');
-      Serial1_flush_buffer();
-
-    }else{
-      return "false@";
-      }
-
-
-
-  if(incomingString=="finish"){
-    finish=true;
-    return dataRecieve;
-  }else{
+  if(dataRecieve=="false@"){
     return "false@";
-    }
+    }else{
 
+      delay(100);
+      Serial1.println(dataRecieve+"@");
+      Serial1.flush();
+      String confirm=waitForData(time_wait);
+      if(confirm=="finish"){
+        finish=true;
+        return dataRecieve;
+        }else{
+          return "false@";
+          }
+      
+      }
+  
   }
 }

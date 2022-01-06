@@ -26,23 +26,54 @@ void setup() {
 
   
   
-  String data= waitForData(10000);
+  unsigned long time_wait = 10000;
+  String sensor_data1= recieveData(time_wait);
 
-  
+  if(sensor_data1!="false@"){
 
+    delay(100);
+    String sensor_data2= recieveData(time_wait);
+
+    if(sensor_data2!=false){
+
+      if(connectToWifiNetwork(String(ssid), String(password))){
+               WiFiClient client;
+               sendSensorData(String(servername), String(endPoint), 80, sensor_data1+sensor_data2, client);
+               }
+
+               delay(250);
+
+               sendData(2, "data sended to server =)",time_wait);
+               delay(100);
+               sendData(2, "data sended to server 2 =)",time_wait);
+               delay(100);
+               sendData(2, "data sended to server 3 =)",time_wait);
+      
+      
+      }else{}
+
+
+    
+        
+    
+    }else{}
+
+
+  /*
+ 
   if(data!="false@"){
 
-      delay(100);///////////*  Is very important  **///
-      Serial.print("xddata1 recieved@");
+      delay(100);///////////*  Is very important  *
+      Serial.print(data+"@");
       Serial.flush();
 
-      String data2= waitForData(10000);
+      String confirm= waitForData(10000);
 
-      if(data2!="false@"){
+      if(confirm=="finish"){
 
         if(connectToWifiNetwork(String(ssid), String(password))){
                WiFiClient client;
-               sendSensorData(String(servername), String(endPoint), 80, data+data2, client);
+               sendSensorData(String(servername), String(endPoint), 80, data, client);
                }
 
                Serial.print("data sended@");
@@ -54,7 +85,7 @@ void setup() {
         
     }else{}
 
-
+**/
   
 
 
