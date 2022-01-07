@@ -78,9 +78,6 @@ void loop() {
         
           }
 
-
-      
-      
       
       }else{
 
