@@ -53,37 +53,7 @@ boolean sendData(int times, String dataToSend, unsigned long time_wait){
     Serial1.flush();
 
     String incomingString = waitForData(time_wait);
-       /*
-       Serial.println("incomingString: "+incomingString+"**"); //just for test
-       Serial.flush();//just for test
        
-       Serial.println("length incoming: "+String(incomingString.length()));//just for test
-       Serial.flush();//just for test
-
-       Serial.println("dataToSend: "+dataToSend+"**"); //just for test
-       Serial.flush();//just for test
-       
-       Serial.println("length dataToSend: "+String(dataToSend.length()));//just for test
-       Serial.flush();//just for test
-
-       boolean test= incomingString==dataToSend;//just for test
-
-       if(incomingString!=dataToSend){//just for test
-
-        Serial.println("**No son iguales =(");//just for test
-        
-        }else{//just for test
-          Serial.println("Son iguales =)");//just for test
-          
-          }//just for test
-
-         */
-
-       
-
-
- 
-      
       delay(200);// with out this delay, not works......
       if(incomingString==dataToSend){
         Serial1.println("finish@");

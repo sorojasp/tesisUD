@@ -1,8 +1,7 @@
 #include "functions.h"
 #include<TimerOne.h>
 
-String date;
-String time_str;
+
 
 Date date_now;
 Time time_now;
@@ -31,21 +30,23 @@ void setup() {
 void loop() {
 
 
-    
-
-
- 
-
-  
- 
-
-  
-
   if(increaseClockEnable==true){
-
     
+    handleClock();
+    increaseClockEnable=false;
+    
+    }
 
-    time_now.segundos=time_now.segundos+1;
+     
+
+  
+ 
+}
+
+
+void handleClock(){
+
+   time_now.segundos=time_now.segundos+1;
     if(time_now.segundos==60){
       time_now.segundos=0;
       time_now.minutos=time_now.minutos+1;
@@ -73,26 +74,23 @@ void loop() {
       
       }
 
+      
+
+      /*
       Serial.println("Dia: "+String(date_now.dia));
       Serial.println("Mes: "+String(date_now.mes));
       Serial.println("Año: "+String(date_now.anio));
-
+      
       Serial.println("Horas: "+String(time_now.horas));
       Serial.println("Minutos: "+String(time_now.minutos));
       Serial.println("Segundos: "+String(time_now.segundos));
 
       Serial.println("*********************");
-
-      increaseClockEnable=false;
-    
-    
-    }
-
-     
-
+      */
+      
   
- 
-}
+  
+  }
 
 
 void increaseClock(){
