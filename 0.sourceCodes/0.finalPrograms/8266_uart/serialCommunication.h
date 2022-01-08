@@ -42,7 +42,7 @@ boolean sendData(int times, String dataToSend, unsigned long time_wait){
    *@times= Times that try send the data
    *@dataTosend= The data to send have be in string
    */
-
+  delay(150);// delay to make sure that the entity that recieve data are ready for this
   int counter=0;
   boolean dataConfirm=false;
 

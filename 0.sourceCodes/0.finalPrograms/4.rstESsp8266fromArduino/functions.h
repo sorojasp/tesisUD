@@ -115,11 +115,11 @@ String getDateTime(){
     digitalWrite(GPIO0,HIGH);
     digitalWrite(GPIO2,HIGH);
     digitalWrite(pinRST,HIGH);
-    //delay(20);
-    delay_millis(280);
+    delay(280);
+    //delay_millis(280);
     digitalWrite(pinRST,LOW);
-    //delay(100);
-    delay_millis(280);
+    delay(280);
+    //delay_millis(280);
     digitalWrite(pinRST,HIGH);
 
 

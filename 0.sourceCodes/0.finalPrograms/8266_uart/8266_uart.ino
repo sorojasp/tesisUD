@@ -41,13 +41,10 @@ void setup() {
                sendSensorData(String(servername), String(endPoint), 80, sensor_data1+sensor_data2, client);
                }
 
-               delay(250);
+               delay(100);
 
                sendData(2, "data sended to server =)",time_wait);
-               delay(100);
-               sendData(2, "data sended to server 2 =)",time_wait);
-               delay(100);
-               sendData(2, "data sended to server 3 =)",time_wait);
+             
       
       
       }else{}

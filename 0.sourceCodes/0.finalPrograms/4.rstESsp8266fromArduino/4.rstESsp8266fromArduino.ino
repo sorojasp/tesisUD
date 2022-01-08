@@ -50,10 +50,17 @@ void setup() {
    // get initial date and time
    date_now=getDate();
    time_now=getTime_();
+   time_now.segundos=0;
 
    // set timmer 1
-   Timer1.initialize(1000000);
+   /*
+    * Timer1 can accept a minimum period of 1 microsecond and a maximum period of 8388480 microseconds (about 8.3 seconds).
+    */
+   Timer1.initialize(8000000);
    Timer1.attachInterrupt(increaseClock);
+
+   // Initialize the time
+   //handleClock();
 
 
 
@@ -63,17 +70,16 @@ void loop() {
 
 
    if(increaseClockEnable==true){
+
+    
+    Timer1.stop();
+
     handleClock();
-    currently_time=String(date_now.mes)+"-"+String(date_now.dia)+"-"+String(date_now.anio)+"h"+String(time_now.horas)+":"+String(time_now.minutos)+":"+String(time_now.segundos);
-    increaseClockEnable=false;
-    }
+    
 
-
-
-
-    delay_millis(250);
+    delay(250);
     resetESP8266(RST, GPIO0, GPIO2);
-    delay_millis(250);// this value con not be less than 200
+    delay(250);// this value con not be less than 200
 
   
     String incomingString;
@@ -91,7 +97,7 @@ void loop() {
 
       delay(200);
 
-      dataRecieved= sendData(2, "F=236.88&G=20.38&H=20.388&I="+currently_time,time_wait);
+      dataRecieved= sendData(2, "F=236.88&G=20.38&H=20.388&I="+getCurrentTimeStr(),time_wait);
 
       if(dataRecieved==true){
 
@@ -99,14 +105,7 @@ void loop() {
         Serial.println(data_to_server);
         Serial.flush();
 
-        data_to_server= recieveData(time_wait);
-        Serial.println(data_to_server);
-        Serial.flush();
-
-        data_to_server= recieveData(time_wait);
-        Serial.println(data_to_server);
-        Serial.flush();
-        
+   
         
         }else{
           
@@ -127,7 +126,15 @@ void loop() {
 
         
 
-        
+    Timer1.start();   
+    increaseClockEnable=false;
+    
+    }
+
+
+
+
+    
 
 
 
@@ -136,14 +143,14 @@ void loop() {
 
     }
 
-    void handleClock(){
+  void handleClock(){
 
-   time_now.segundos=time_now.segundos+1;
-    if(time_now.segundos==60){
+   time_now.segundos=time_now.segundos+8;
+    if(time_now.segundos>59){
       time_now.segundos=0;
       time_now.minutos=time_now.minutos+1;
 
-      if(time_now.minutos==60){
+      if(time_now.minutos>59){
         time_now.minutos=0;
         time_now.horas=time_now.horas+1;
         }
@@ -172,13 +179,13 @@ void loop() {
       Serial.println("Dia: "+String(date_now.dia));
       Serial.println("Mes: "+String(date_now.mes));
       Serial.println("Año: "+String(date_now.anio));
-      
+      */
       Serial.println("Horas: "+String(time_now.horas));
       Serial.println("Minutos: "+String(time_now.minutos));
       Serial.println("Segundos: "+String(time_now.segundos));
 
       Serial.println("*********************");
-      */
+      
       
   
   
@@ -187,6 +194,15 @@ void loop() {
 
 void increaseClock(){
   increaseClockEnable=true;
+  }
+
+
+
+ String getCurrentTimeStr(){
+  String currenTimeString= String(date_now.mes)+"-"+String(date_now.dia)+"-"+String(date_now.anio)+"h"+String(time_now.horas)+":"+String(time_now.minutos)+":"+String(time_now.segundos);
+
+  return currenTimeString;
+  
   
   }
 
