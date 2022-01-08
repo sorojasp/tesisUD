@@ -56,7 +56,7 @@ void setup() {
    /*
     * Timer1 can accept a minimum period of 1 microsecond and a maximum period of 8388480 microseconds (about 8.3 seconds).
     */
-   Timer1.initialize(8000000);
+   Timer1.initialize(6000000);
    Timer1.attachInterrupt(increaseClock);
 
    // Initialize the time
@@ -145,7 +145,7 @@ void loop() {
 
   void handleClock(){
 
-   time_now.segundos=time_now.segundos+8;
+   time_now.segundos=time_now.segundos+6;
     if(time_now.segundos>59){
       time_now.segundos=0;
       time_now.minutos=time_now.minutos+1;
