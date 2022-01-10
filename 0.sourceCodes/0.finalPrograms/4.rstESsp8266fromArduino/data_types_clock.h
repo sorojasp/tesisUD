@@ -12,7 +12,13 @@ struct Time{
   int horas;
   int minutos;
   int segundos;
-  
+
+  };
+
+  struct DateTime{
+
+    Time time;
+    Date date;
   };
 
 
@@ -30,5 +36,5 @@ struct Time{
     int Oct;
     int Nov;
     int Dec;
-    
+
     };

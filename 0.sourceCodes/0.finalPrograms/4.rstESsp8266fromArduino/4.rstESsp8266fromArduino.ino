@@ -8,8 +8,12 @@
 // *** import library to handle timmer one
 #include<TimerOne.h>
 
+/*Import DHT library*/
+#include "DHT.h"
+
  /***  Set of pin to handle ESP8266-01 ***/
-  
+
+
   const byte GPIO2 = 8;
   const byte GPIO0 = 7;
   const byte RST = 9;
@@ -19,18 +23,38 @@
   const byte is_ok = 5;
   const byte present_errors = 6;
 
+  /*set period of interruption and period to take a sample*/
+  int interruption_period=5; // 5 seconds;
+  volatile boolean take_sample=false;
 
-  /*** Variables to implement the clock ***/
+  /* set period to send data in seconds*/
+  //int period_send_data=900;
+  int period_send_data=20;
+  volatile boolean send_data=false;
 
-  Date date_now;
-  Time time_now;
-  volatile boolean increaseClockEnable=false;
+  /* amount of sample before send data*/
+  volatile int  amount_samples=period_send_data/interruption_period;
 
-  //set days in months of 2022 and 2023, index 0 is 2022 and index 1 is 2023
-  Anio anios[2]={{31,28,31,30,31,30,31,31,30,31,30,31},{31,28,31,30,31,30,31,31,30,31,30,31}};
-  int anios_index=0;
 
-  String currently_time;
+  volatile int counter=0;
+  int sample_counter=0;
+
+
+  /*Set of DHT11*/
+
+  #define DHTPIN 10
+  #define DHTTYPE DHT11
+  DHT dht(DHTPIN, DHTTYPE);
+
+
+   /*set variable of humidity and temperature */
+   int h=0;
+   int t=0;
+
+   float average_temp=0;
+   float average_hume=0;
+
+   
 
 
 
@@ -47,20 +71,16 @@ void setup() {
   Serial1.begin(9600);
 
 
-   // get initial date and time
-   date_now=getDate();
-   time_now=getTime_();
-   time_now.segundos=0;
 
    // set timmer 1
    /*
     * Timer1 can accept a minimum period of 1 microsecond and a maximum period of 8388480 microseconds (about 8.3 seconds).
     */
-   Timer1.initialize(6000000);
-   Timer1.attachInterrupt(increaseClock);
+   Timer1.initialize(interruption_period*1000000); //interrupiton will happen each 8 seconds
+   Timer1.attachInterrupt(interruptionFunction);
 
-   // Initialize the time
-   //handleClock();
+
+
 
 
 
@@ -69,26 +89,70 @@ void setup() {
 void loop() {
 
 
-   if(increaseClockEnable==true){
+  if(take_sample==true){
+
+
+    
+
+
+    sample_counter++;
+    Serial.println("take_sample");
+    Serial.flush();
+
+   h = dht.readHumidity()+h;// Lee la humedad
+   t= dht.readTemperature()+t;//Lee la temperatura
+
+   Serial.println("temperarura: "+String(dht.readHumidity()));
+   Serial.flush();
+
+   Serial.println("humedity: "+String(dht.readTemperature()));
+   Serial.flush();
+
+
 
     
     Timer1.stop();
 
-    handleClock();
-    
+
+
+
+    Timer1.start();
+    take_sample = false;
+  }
+
+
+
+
+
+   if(send_data==true){
+
+    //In this part we will have to use the **sample_counter** to calculate the average and then we will have to set with 0 
+
+
+    Timer1.stop();
+
+   average_temp=t/sample_counter;
+   average_hume=h/sample_counter;
+   
+   Serial.println("Average Temperature: "+String(average_temp));
+   Serial.flush();
+
+   Serial.println("Average humedity: "+String(average_hume));
+   Serial.flush();
+
 
     delay(250);
     resetESP8266(RST, GPIO0, GPIO2);
     delay(250);// this value con not be less than 200
 
-  
+
     String incomingString;
 
     Serial1_flush_buffer();// ** important because clear the serial port after recieve the junk from ESP8266-01
 
     unsigned long time_wait=10000;
 
-    boolean dataRecieved= sendData(2, "&A=200.38&B=10000.38&D=100000.99&E=100.25",time_wait);
+    boolean dataRecieved= sendData(2, "&A=200.38&B=10000.38&C=100000.99",time_wait);
 
     if(dataRecieved==true){
 
@@ -97,7 +161,7 @@ void loop() {
 
       delay(200);
 
-      dataRecieved= sendData(2, "F=236.88&G=20.38&H=20.388&I="+getCurrentTimeStr(),time_wait);
+      dataRecieved= sendData(2, "&D=100.25E=236.88&F="+String(average_temp)+"&G="+String(average_hume),time_wait);
 
       if(dataRecieved==true){
 
@@ -105,114 +169,72 @@ void loop() {
         Serial.println(data_to_server);
         Serial.flush();
 
-   
-        
+
+
         }else{
-          
+
          Serial.println("**  Error to send data 2 not  Recieved =(");
          Serial.flush();
-        
+
           }
 
-      
+
       }else{
 
         Serial.println("**  Error data not  Recieved =(");
          Serial.flush();
-        
-        
-        
+
+
+
         }
-
-        
-
-    Timer1.start();   
-    increaseClockEnable=false;
-    
-    }
-
 
 
 
     
+    average_temp=0;
+    average_hume=0;
+    t=0;
+    h=0;
 
+    sample_counter=0;
+    send_data=false;
 
-
-
+    Timer1.start();
 
 
     }
 
-  void handleClock(){
 
-   time_now.segundos=time_now.segundos+6;
-    if(time_now.segundos>59){
-      time_now.segundos=0;
-      time_now.minutos=time_now.minutos+1;
+    }
 
-      if(time_now.minutos>59){
-        time_now.minutos=0;
-        time_now.horas=time_now.horas+1;
-        }
 
-       if(time_now.horas==24){
-        time_now.horas=0;
-        date_now.dia=date_now.dia+1;
-        }
+    void interruptionFunction(){
 
-        if(date_now.dia>getDaysInMonth(anios[anios_index],date_now.mes)){
-          date_now.dia=1;
-          date_now.mes=date_now.mes+1;
-          }
-
-          if(date_now.mes>12){
-            date_now.mes=1;
-            anios_index++;
-            
-            }
-      
+      take_sample=true;
+      counter++;
+      if(counter>=amount_samples){
+        counter=0;
+        send_data=true;
       }
 
-      
-
-      /*
-      Serial.println("Dia: "+String(date_now.dia));
-      Serial.println("Mes: "+String(date_now.mes));
-      Serial.println("Año: "+String(date_now.anio));
-      */
-      Serial.println("Horas: "+String(time_now.horas));
-      Serial.println("Minutos: "+String(time_now.minutos));
-      Serial.println("Segundos: "+String(time_now.segundos));
-
-      Serial.println("*********************");
-      
-      
-  
-  
-  }
-
-
-void increaseClock(){
-  increaseClockEnable=true;
-  }
+    }
 
 
 
- String getCurrentTimeStr(){
-  String currenTimeString= String(date_now.mes)+"-"+String(date_now.dia)+"-"+String(date_now.anio)+"h"+String(time_now.horas)+":"+String(time_now.minutos)+":"+String(time_now.segundos);
 
-  return currenTimeString;
-  
-  
-  }
+
+
+
+
+
 
 
         /*data to probe  NH3=200.38&CO2=10000.38&CH4=100000.99&H2S=100.25&SO2=236.88&T=200.38&H=200.388&t=Dec-9-2021h10:02:18
        *
-       * ?NH3=200.38&CO2=10000.38&CH4=100000.99&H2S=100.25@
-       * &SO2=236.88&T=200.38&H=200.388&t=Dec-9-2021h10:02:18@
+       * ?NH3=200.38&CO2=10000.38&CH4=100000.99&H2S=100.25
+       * &SO2=236.88&T=200.38&H=200.388&t=Dec-9-2021h10:02:18
        *
-       * A=200.38&B=10000.38&D=100000.99&E=100.25@
-       * F=236.88&G=20.38&H=20.388&I=Dec-9-2021h10:02:18@
-       * 
+       * &A=200.38&B=10000.38&C=100000.99
+       * &D=100.25E=236.88&F=20.38&G=20.388
+       *
        */
