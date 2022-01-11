@@ -54,7 +54,7 @@
    float average_temp=0;
    float average_hume=0;
 
-   
+
 
 
 
@@ -91,9 +91,7 @@ void loop() {
 
   if(take_sample==true){
 
-
-    
-
+    Timer1.stop();
 
     sample_counter++;
     Serial.println("take_sample");
@@ -110,12 +108,6 @@ void loop() {
 
 
 
-    
-    Timer1.stop();
-
-
-
-
     Timer1.start();
     take_sample = false;
   }
@@ -126,14 +118,14 @@ void loop() {
 
    if(send_data==true){
 
-    //In this part we will have to use the **sample_counter** to calculate the average and then we will have to set with 0 
+    //In this part we will have to use the **sample_counter** to calculate the average and then we will have to set with 0
 
 
     Timer1.stop();
 
    average_temp=t/sample_counter;
    average_hume=h/sample_counter;
-   
+
    Serial.println("Average Temperature: "+String(average_temp));
    Serial.flush();
 
@@ -190,7 +182,7 @@ void loop() {
 
 
 
-    
+
     average_temp=0;
     average_hume=0;
     t=0;
