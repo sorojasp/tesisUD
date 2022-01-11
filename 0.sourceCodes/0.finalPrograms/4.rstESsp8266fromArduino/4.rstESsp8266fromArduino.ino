@@ -96,6 +96,8 @@ void loop() {
 
   if(take_sample==true){
 
+   
+
     Timer1.stop();
 
     sample_counter++;
@@ -105,7 +107,7 @@ void loop() {
    h = dht.readHumidity()+h;// Lee la humedad
    t= dht.readTemperature()+t;//Lee la temperatura
 
-   Serial.println("temperarura: "+String(dht.readHumidity()));
+   Serial.println("temperaTura: "+String(dht.readHumidity()));
    Serial.flush();
 
    Serial.println("humedity: "+String(dht.readTemperature()));
@@ -170,6 +172,17 @@ void loop() {
         String data_to_server= recieveData(time_wait);
         Serial.println(data_to_server);
         Serial.flush();
+
+        if(data_to_server=="data sended to server =)"){
+          digitalWrite(is_ok,HIGH);
+          digitalWrite(present_errors,LOW);
+          
+          }else{
+            digitalWrite(is_ok,LOW);
+           digitalWrite(present_errors,HIGH);
+            
+            
+            }
 
 
 
