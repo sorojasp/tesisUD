@@ -79,6 +79,11 @@ void setup() {
    Timer1.initialize(interruption_period*1000000); //interrupiton will happen each 8 seconds
    Timer1.attachInterrupt(interruptionFunction);
 
+   // Set diodes to alert when something is wrong
+
+   pinMode(is_ok, OUTPUT);
+   pinMode(present_errors,OUTPUT);
+
 
 
 
@@ -148,6 +153,9 @@ void loop() {
 
     if(dataRecieved==true){
 
+      digitalWrite(is_ok,HIGH);
+      digitalWrite(present_errors,LOW);
+
       Serial.println("data Recieved =)");
       Serial.flush();
 
@@ -156,6 +164,8 @@ void loop() {
       dataRecieved= sendData(2, "&D=100.25E=236.88&F="+String(average_temp)+"&G="+String(average_hume),time_wait);
 
       if(dataRecieved==true){
+        digitalWrite(is_ok,HIGH);
+        digitalWrite(present_errors,LOW);
 
         String data_to_server= recieveData(time_wait);
         Serial.println(data_to_server);
@@ -165,6 +175,9 @@ void loop() {
 
         }else{
 
+          digitalWrite(is_ok,LOW);
+          digitalWrite(present_errors,HIGH);
+
          Serial.println("**  Error to send data 2 not  Recieved =(");
          Serial.flush();
 
@@ -173,8 +186,12 @@ void loop() {
 
       }else{
 
+
+       digitalWrite(is_ok,LOW);
+       digitalWrite(present_errors,HIGH);
+
         Serial.println("**  Error data not  Recieved =(");
-         Serial.flush();
+        Serial.flush();
 
 
 
