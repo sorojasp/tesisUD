@@ -99,31 +99,49 @@ void loop() {
    
 
     Timer1.stop();
+    
+    
+    Serial.println("take_sample");// ** just for test
+    Serial.flush();// ** just for test
 
-    sample_counter++;
-    Serial.println("take_sample");
-    Serial.flush();
+    if(dht.readHumidity()!=NULL || dht.readHumidity()!=NULL){
+      sample_counter++;
+      h = dht.readHumidity()+h;// Lee la humedad
+      t= dht.readTemperature()+t;//Lee la temperatura
+      
+      Serial.println("temperaTura: "+String( dht.readTemperature()));// ** just for test
+      Serial.flush();// ** just for test
+      
+      Serial.println("humedity: "+String(dht.readHumidity()));// ** just for test
+      Serial.flush();// ** just for test
 
-   h = dht.readHumidity()+h;// Lee la humedad
-   t= dht.readTemperature()+t;//Lee la temperatura
-
-   Serial.println("temperaTura: "+String(dht.readHumidity()));
-   Serial.flush();
-
-   Serial.println("humedity: "+String(dht.readTemperature()));
-   Serial.flush();
+      digitalWrite(is_ok,HIGH);
+      digitalWrite(present_errors,LOW);
 
 
+      }else{
 
-    Timer1.start();
-    take_sample = false;
+        Serial.println("Invalid value");
+        Serial.flush();
+
+        digitalWrite(is_ok,LOW);
+        digitalWrite(present_errors,HIGH);
+
+        
+        
+        }
+
+        Timer1.start();
+       take_sample = false;
+
+   
   }
 
 
 
 
 
-   if(send_data==true){
+   if(send_data==true && sample_counter!=0){
 
     //In this part we will have to use the **sample_counter** to calculate the average and then we will have to set with 0
 
@@ -133,11 +151,11 @@ void loop() {
    average_temp=t/sample_counter;
    average_hume=h/sample_counter;
 
-   Serial.println("Average Temperature: "+String(average_temp));
-   Serial.flush();
+   Serial.println("Average Temperature: "+String(average_temp));// ** just for test
+   Serial.flush();// ** just for test
 
-   Serial.println("Average humedity: "+String(average_hume));
-   Serial.flush();
+   Serial.println("Average humedity: "+String(average_hume));// ** just for test
+   Serial.flush();// ** just for test
 
 
     delay(250);
@@ -158,8 +176,8 @@ void loop() {
       digitalWrite(is_ok,HIGH);
       digitalWrite(present_errors,LOW);
 
-      Serial.println("data Recieved =)");
-      Serial.flush();
+      Serial.println("data Recieved =)");// ** just for test
+      Serial.flush();// ** just for test
 
       delay(200);
 
@@ -170,8 +188,8 @@ void loop() {
         digitalWrite(present_errors,LOW);
 
         String data_to_server= recieveData(time_wait);
-        Serial.println(data_to_server);
-        Serial.flush();
+        Serial.println(data_to_server);// ** just for test
+        Serial.flush();// ** just for test
 
         if(data_to_server=="data sended to server =)"){
           digitalWrite(is_ok,HIGH);
@@ -191,8 +209,7 @@ void loop() {
           digitalWrite(is_ok,LOW);
           digitalWrite(present_errors,HIGH);
 
-         Serial.println("**  Error to send data 2 not  Recieved =(");
-         Serial.flush();
+         Serial.println("**  Error to send data 2 not  Recieved =(");// ** just for test
 
           }
 
