@@ -3,6 +3,7 @@
 #include "clock_functions.h"
 
 #include "functions.h"
+//#include "serialCommunication_port0.h"
 #include "serialCommunication.h"
 
 // *** import library to handle timmer one
@@ -67,7 +68,7 @@ void setup() {
   pinMode(RST,OUTPUT);
 
 
-  Serial.begin(9600);
+  //Serial.begin(9600);
   Serial1.begin(9600);
 
 
@@ -101,19 +102,19 @@ void loop() {
     Timer1.stop();
     
     
-    Serial.println("take_sample");// ** just for test
-    Serial.flush();// ** just for test
+    //Serial.println("take_sample");// ** just for test
+    //Serial.flush();// ** just for test
 
     if(dht.readHumidity()!=NULL || dht.readHumidity()!=NULL){
       sample_counter++;
       h = dht.readHumidity()+h;// Lee la humedad
       t= dht.readTemperature()+t;//Lee la temperatura
       
-      Serial.println("temperaTura: "+String( dht.readTemperature()));// ** just for test
-      Serial.flush();// ** just for test
+      //Serial.println("temperaTura: "+String( dht.readTemperature()));// ** just for test
+      //Serial.flush();// ** just for test
       
-      Serial.println("humedity: "+String(dht.readHumidity()));// ** just for test
-      Serial.flush();// ** just for test
+      //Serial.println("humedity: "+String(dht.readHumidity()));// ** just for test
+      //Serial.flush();// ** just for test
 
       digitalWrite(is_ok,HIGH);
       digitalWrite(present_errors,LOW);
@@ -121,8 +122,8 @@ void loop() {
 
       }else{
 
-        Serial.println("Invalid value");
-        Serial.flush();
+        //Serial.println("Invalid value");
+        //Serial.flush();
 
         digitalWrite(is_ok,LOW);
         digitalWrite(present_errors,HIGH);
@@ -151,11 +152,11 @@ void loop() {
    average_temp=t/sample_counter;
    average_hume=h/sample_counter;
 
-   Serial.println("Average Temperature: "+String(average_temp));// ** just for test
-   Serial.flush();// ** just for test
+   //Serial.println("Average Temperature: "+String(average_temp));// ** just for test
+   //Serial.flush();// ** just for test
 
-   Serial.println("Average humedity: "+String(average_hume));// ** just for test
-   Serial.flush();// ** just for test
+   //Serial.println("Average humedity: "+String(average_hume));// ** just for test
+   //Serial.flush();// ** just for test
 
 
     delay(250);
@@ -176,8 +177,8 @@ void loop() {
       digitalWrite(is_ok,HIGH);
       digitalWrite(present_errors,LOW);
 
-      Serial.println("data Recieved =)");// ** just for test
-      Serial.flush();// ** just for test
+      //Serial.println("data Recieved =)");// ** just for test
+      //Serial.flush();// ** just for test
 
       delay(200);
 
@@ -188,8 +189,8 @@ void loop() {
         digitalWrite(present_errors,LOW);
 
         String data_to_server= recieveData(time_wait);
-        Serial.println(data_to_server);// ** just for test
-        Serial.flush();// ** just for test
+        //Serial.println(data_to_server);// ** just for test
+        //Serial.flush();// ** just for test
 
         if(data_to_server=="data sended to server =)"){
           digitalWrite(is_ok,HIGH);
@@ -209,7 +210,8 @@ void loop() {
           digitalWrite(is_ok,LOW);
           digitalWrite(present_errors,HIGH);
 
-         Serial.println("**  Error to send data 2 not  Recieved =(");// ** just for test
+         //Serial.println("**  Error to send data 2 not  Recieved =(");// ** just for test
+         //Serial.flush();
 
           }
 
@@ -220,8 +222,8 @@ void loop() {
        digitalWrite(is_ok,LOW);
        digitalWrite(present_errors,HIGH);
 
-        Serial.println("**  Error data not  Recieved =(");
-        Serial.flush();
+        //Serial.println("**  Error data not  Recieved =(");
+        //Serial.flush();
 
 
 
