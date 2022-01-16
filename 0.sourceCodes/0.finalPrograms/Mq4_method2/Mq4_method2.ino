@@ -116,7 +116,7 @@ void loop() {
       Serial.println(ppm_MQ136); //Display calculated Ro
       Serial.flush();
       
-      Serial.print("**");
+      Serial.println("    ");
       
       
       

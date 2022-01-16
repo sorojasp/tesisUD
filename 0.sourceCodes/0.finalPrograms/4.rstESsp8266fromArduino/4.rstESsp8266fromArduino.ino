@@ -3,8 +3,8 @@
 #include "clock_functions.h"
 
 #include "functions.h"
-//#include "serialCommunication_port0.h"
-#include "serialCommunication.h"
+#include "serialCommunication_port0.h"
+//#include "serialCommunication.h"
 
 // *** import library to handle timmer one
 #include<TimerOne.h>
@@ -15,14 +15,14 @@
  /***  Set of pin to handle ESP8266-01 ***/
 
 
-  const byte GPIO2 = 8;
-  const byte GPIO0 = 7;
+  const byte GPIO2 = 11;
+  const byte GPIO0 = 10;
   const byte RST = 9;
 
   /***  Set of pin to indicate when the process is ok or present errors ***/
 
-  const byte is_ok = 5;
-  const byte present_errors = 6;
+  const byte is_ok = 8;
+  const byte present_errors = 7;
 
   /*set period of interruption and period to take a sample*/
   int interruption_period=5; // 5 seconds;
@@ -43,7 +43,7 @@
 
   /*Set of DHT11*/
 
-  #define DHTPIN 10
+  #define DHTPIN 2//PIN SELECTED
   #define DHTTYPE DHT11
   DHT dht(DHTPIN, DHTTYPE);
 
@@ -68,8 +68,8 @@ void setup() {
   pinMode(RST,OUTPUT);
 
 
-  //Serial.begin(9600);
-  Serial1.begin(9600);
+  Serial.begin(9600);
+  //Serial1.begin(9600);
 
 
 
