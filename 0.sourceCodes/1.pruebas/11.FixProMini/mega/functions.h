@@ -111,13 +111,16 @@ String getDateTime(){
   }
 
 
-  void resetESP8266(byte pinRST, byte GPIO0, byte GPIO2){
-    digitalWrite(GPIO0,LOW);
-    digitalWrite(GPIO2,LOW);
+ void resetESP8266(byte pinRST, byte GPIO0, byte GPIO2){
+    digitalWrite(GPIO0,HIGH);
+    digitalWrite(GPIO2,HIGH);
     digitalWrite(pinRST,HIGH);
-    delay(300);
-   
+    delay(280);
+    //delay_millis(280);
     digitalWrite(pinRST,LOW);
+    delay(280);
+    //delay_millis(280);
+    digitalWrite(pinRST,HIGH);
 
 
   }

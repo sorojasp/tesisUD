@@ -111,7 +111,7 @@ String getDateTime(){
   }
 
 
-  void resetESP8266(byte pinRST, byte GPIO0, byte GPIO2){
+ void resetESP8266(byte pinRST, byte GPIO0, byte GPIO2){
     digitalWrite(GPIO0,LOW);
     digitalWrite(GPIO2,LOW);
     digitalWrite(pinRST,HIGH);

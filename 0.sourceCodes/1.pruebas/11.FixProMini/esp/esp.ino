@@ -21,39 +21,23 @@ void setup() {
 
   Serial.begin(9600);
 
+  delay(100);
+
   Serial.print("junk@");
   Serial.flush();
 
 
-
-  unsigned long time_wait = 10000;
-  String sensor_data1= recieveData(time_wait);
-
-  if(sensor_data1!="false@"){
-
-    delay(100);
-    String sensor_data2= recieveData(time_wait);
-
-    if(sensor_data2!="false@"){
-
-      if(connectToWifiNetwork(String(ssid), String(password))){
+     if(connectToWifiNetwork(String(ssid), String(password))){
                WiFiClient client;
-               sendSensorData(String(servername), String(endPoint), 80, sensor_data1+sensor_data2, client);
+               sendSensorData(String(servername), String(endPoint), 80, "&A=200.38&B=10000.38&C=100000.99", client);
                }
 
-               delay(100);
+               
 
-               sendData(2, "data sended to server =)",time_wait);
+               
+    
 
-
-
-      }else{}
-
-
-
-
-
-    }else{}
+  
 
 
   /*
