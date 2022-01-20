@@ -12,6 +12,9 @@
 /*Import DHT library*/
 #include "DHT.h"
 
+/**import gases functions**/
+#include "gases_functions.h"
+
  /***  Set of pin to handle ESP8266-01 ***/
 
 
@@ -43,7 +46,7 @@
 
   /*Set of DHT11*/
 
-  #define DHTPIN 2//PIN SELECTED
+  #define DHTPIN 12//PIN SELECTED
   #define DHTTYPE DHT11
   DHT dht(DHTPIN, DHTTYPE);
 
@@ -54,6 +57,40 @@
 
    float average_temp=0;
    float average_hume=0;
+
+
+   /*Set variables to get gas concentrations */
+   
+   float k_MQ4=4.4;//constant
+   float k_MQ137=3.6;//constant
+   float k_MQ136=3.6;//constant
+
+   ChartValues chartValues_MQ4=find_m_b(200.0,1.8,1000.0,1.0,500.0,1.4);
+   ChartValues chartValues_MQ137=find_m_b(40.0,1.0,100.0,0.8,70.0,0.75);
+   ChartValues chartValues_MQ136=find_m_b(40.0,1.0,100.0,0.78,70.0,0.87);
+   
+   float analog_value_MQ4;
+   float analog_value_MQ137;
+   float analog_value_MQ136;
+   
+   SensorValues MQ4_values;
+   SensorValues MQ137_values;
+   SensorValues MQ136_values;
+   
+   float ppm_MQ4=0;
+   float ppm_MQ137=0;
+   float ppm_MQ136=0;
+   
+     
+
+   float ppm_MQ4_average=0;
+   float ppm_MQ137_average=0;
+   float ppm_MQ136_average=0;
+    
+    
+
+
+   
 
 
 
@@ -85,6 +122,12 @@ void setup() {
    pinMode(is_ok, OUTPUT);
    pinMode(present_errors,OUTPUT);
 
+   /*Set Ro for each sensor*/
+
+    MQ4_values.Ro=37.39;
+    MQ137_values.Ro=155.74;
+    MQ136_values.Ro=87.92;
+
 
 
 
@@ -115,6 +158,17 @@ void loop() {
       
       //Serial.println("humedity: "+String(dht.readHumidity()));// ** just for test
       //Serial.flush();// ** just for test
+
+      MQ4_values = findRs(analogRead(A2), 5.0, 20.0);
+      MQ137_values =findRs(analogRead(A3), 5.0, 47.0);
+      MQ136_values =findRs(analogRead(A1), 5.0, 20.0);
+
+      ppm_MQ4= find_ppm(MQ4_values.Ro, MQ4_values.Rs, chartValues_MQ4.m, chartValues_MQ4.b )+ppm_MQ4;
+      ppm_MQ137= find_ppm(MQ137_values.Ro, MQ137_values.Rs, chartValues_MQ137.m,chartValues_MQ137.b)+ppm_MQ137;
+      ppm_MQ136= find_ppm(MQ136_values.Ro, MQ136_values.Rs, chartValues_MQ136.m,chartValues_MQ136.b)+ppm_MQ136;
+
+
+      
 
       digitalWrite(is_ok,HIGH);
       digitalWrite(present_errors,LOW);
@@ -151,6 +205,9 @@ void loop() {
 
    average_temp=t/sample_counter;
    average_hume=h/sample_counter;
+   ppm_MQ4_average=ppm_MQ4/sample_counter;
+   ppm_MQ136_average=ppm_MQ136/sample_counter;
+   ppm_MQ137_average=ppm_MQ137/sample_counter;
 
    //Serial.println("Average Temperature: "+String(average_temp));// ** just for test
    //Serial.flush();// ** just for test
@@ -170,7 +227,7 @@ void loop() {
 
     unsigned long time_wait=10000;
 
-    boolean dataRecieved= sendData(2, "&A=200.38&B=10000.38&C=100000.99",time_wait);
+    boolean dataRecieved= sendData(2, "&A="+String(ppm_MQ137_average)+"&B=10000.38&C="+String(ppm_MQ4_average),time_wait);
 
     if(dataRecieved==true){
 
@@ -182,7 +239,7 @@ void loop() {
 
       delay(200);
 
-      dataRecieved= sendData(2, "&D=100.25E=236.88&F="+String(average_temp)+"&G="+String(average_hume),time_wait);
+      dataRecieved= sendData(2, "&D="+String(ppm_MQ136_average)+"&E=236.88&F="+String(average_temp)+"&G="+String(average_hume),time_wait);
 
       if(dataRecieved==true){
         digitalWrite(is_ok,HIGH);
@@ -236,6 +293,15 @@ void loop() {
     average_hume=0;
     t=0;
     h=0;
+    
+    ppm_MQ4_average=0;
+    ppm_MQ137_average=0;
+    ppm_MQ136_average=0;
+
+    ppm_MQ4=0;
+    ppm_MQ136=0;
+    ppm_MQ137=0;
+
 
     sample_counter=0;
     send_data=false;
@@ -270,10 +336,10 @@ void loop() {
 
 
 
-        /*data to probe  NH3=200.38&CO2=10000.38&CH4=100000.99&H2S=100.25&SO2=236.88&T=200.38&H=200.388&t=Dec-9-2021h10:02:18
+        /*data to probe  NH3=200.38&CO2=10000.38&CH4=100000.99&H2S=100.25&SO2=236.88&T=200.38&H=200.388
        *
-       * ?NH3=200.38&CO2=10000.38&CH4=100000.99&H2S=100.25
-       * &SO2=236.88&T=200.38&H=200.388&t=Dec-9-2021h10:02:18
+       * ?NH3=200.38&CO2=10000.38&CH4=100000.99
+       * &H2S=100.25&SO2=236.88&T=200.38&H=200.388
        *
        * &A=200.38&B=10000.38&C=100000.99
        * &D=100.25E=236.88&F=20.38&G=20.388
