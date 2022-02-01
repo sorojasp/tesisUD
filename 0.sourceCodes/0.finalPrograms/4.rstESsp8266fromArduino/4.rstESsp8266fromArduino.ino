@@ -27,6 +27,10 @@
   const byte is_ok = 8;
   const byte present_errors = 7;
 
+  //*flag to know if the sytem is work to make probe**///
+
+  const byte probe_mode = 6;
+
   /*set period of interruption and period to take a sample*/
   int interruption_period=5; // 5 seconds;
   volatile boolean take_sample=false;
@@ -103,6 +107,8 @@ void setup() {
   pinMode(GPIO0,OUTPUT);
   pinMode(GPIO2,OUTPUT);
   pinMode(RST,OUTPUT);
+
+  pinMode(probe_mode,INPUT);
 
 
   Serial.begin(9600);
@@ -227,7 +233,7 @@ void loop() {
 
     unsigned long time_wait=10000;
 
-    boolean dataRecieved= sendData(2, "&A="+String(ppm_MQ137_average)+"&B=10000.38&C="+String(ppm_MQ4_average),time_wait);
+    boolean dataRecieved= sendData(2, "&A="+String(ppm_MQ137_average)+"&B=10000.38&C="+String(ppm_MQ4_average)+String("&H=4.697540")+"&probe_mode="+String(digitalRead(probe_mode)),time_wait);
 
     if(dataRecieved==true){
 
@@ -239,7 +245,7 @@ void loop() {
 
       delay(200);
 
-      dataRecieved= sendData(2, "&D="+String(ppm_MQ136_average)+"&E=236.88&F="+String(average_temp)+"&G="+String(average_hume),time_wait);
+      dataRecieved= sendData(2, "&D="+String(ppm_MQ136_average)+"&E=236.88&F="+String(average_temp)+"&G="+String(average_hume)+String("&I=-74.114441"),time_wait);
 
       if(dataRecieved==true){
         digitalWrite(is_ok,HIGH);

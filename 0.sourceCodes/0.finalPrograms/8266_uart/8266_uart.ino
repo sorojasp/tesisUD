@@ -10,8 +10,8 @@ int GPIO2=2;
 int GPIO0=0;
 char ssid[] = "Ingnovatech";          //  your network SSID (name)
 char password[] = "recyapp2021";
-char servername[]="taskcontrollersr7.herokuapp.com";
-char endPoint[]="/task/";
+char servername[]="odor-sr7.herokuapp.com";
+char endPoint[]="/gasConcentrations";
 
 
 
