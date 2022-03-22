@@ -54,28 +54,6 @@ void setup() {
 
 void loop() {
 
-  delay(700);
-
-  float adcValue= float(analogRead(A0));
-
-  Serial.println("adcValue: "+ String(adcValue));
-  float MG811AnalogVoltage = float(((5.0*(float)adcValue)/(float)1023.0)*1000); // get MG811 Voltage in mV
-
-    Serial.println("voltage: "+String(MG811AnalogVoltage));
-      Serial.flush();
-
-  int index=0;
-  bool lineFounded=false;
-
-  while((index<(sizeof(MG811_points)-1)&&lineFounded==false)){
-
-    if( (MG811AnalogVoltage>=MG811_points[index].y) && (MG811AnalogVoltage<=MG811_points[index+1].y) ){
-      lineFounded=true;
-      Serial.println("line: "+String(index));
-      Serial.flush();
-      }
-    
-    index++;
-    }
+  
     
     }
