@@ -19,3 +19,9 @@ struct SensorValues{
   float Ro;
 
 };
+
+struct Point{
+
+  float x;
+  float y;
+  }
