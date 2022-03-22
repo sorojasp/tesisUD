@@ -84,21 +84,23 @@
    float ppm_MQ4=0;
    float ppm_MQ137=0;
    float ppm_MQ136=0;
+   float ppm_MG811=0;
    
      
 
    float ppm_MQ4_average=0;
    float ppm_MQ137_average=0;
    float ppm_MQ136_average=0;
+   float ppm_MG811_average=0;
+
+
+
+   /**Import library to read the data of pppm from MG811 sensor**/
+   #include "CO2Sensor.h"
+   CO2Sensor co2Sensor(A0, 0.99, 100);// get a instance of sensor
+
     
     
-
-
-   
-
-
-
-
 
 
 void setup() {
@@ -133,6 +135,11 @@ void setup() {
     MQ4_values.Ro=37.39;
     MQ137_values.Ro=155.74;
     MQ136_values.Ro=87.92;
+
+
+
+    /*calibrate MG811 sensor*/
+    co2Sensor.calibrate();
 
 
 
@@ -172,7 +179,7 @@ void loop() {
       ppm_MQ4= find_ppm(MQ4_values.Ro, MQ4_values.Rs, chartValues_MQ4.m, chartValues_MQ4.b )+ppm_MQ4;
       ppm_MQ137= find_ppm(MQ137_values.Ro, MQ137_values.Rs, chartValues_MQ137.m,chartValues_MQ137.b)+ppm_MQ137;
       ppm_MQ136= find_ppm(MQ136_values.Ro, MQ136_values.Rs, chartValues_MQ136.m,chartValues_MQ136.b)+ppm_MQ136;
-
+      ppm_MG811=float(co2Sensor.read())+ppm_MG811;
 
       
 
@@ -214,6 +221,7 @@ void loop() {
    ppm_MQ4_average=ppm_MQ4/sample_counter;
    ppm_MQ136_average=ppm_MQ136/sample_counter;
    ppm_MQ137_average=ppm_MQ137/sample_counter;
+   ppm_MG811_average=ppm_MG811/sample_counter;
 
    //Serial.println("Average Temperature: "+String(average_temp));// ** just for test
    //Serial.flush();// ** just for test
@@ -233,7 +241,7 @@ void loop() {
 
     unsigned long time_wait=10000;
 
-    boolean dataRecieved= sendData(2, "&A="+String(ppm_MQ137_average)+"&B=10000.38&C="+String(ppm_MQ4_average)+String("&H=4.697540")+"&probe_mode="+String(digitalRead(probe_mode)),time_wait);
+    boolean dataRecieved= sendData(2, "&A="+String(ppm_MQ137_average)+"&B="+String(ppm_MG811_average)+"&C="+String(ppm_MQ4_average)+String("&H=4.697540")+"&probe_mode="+String(digitalRead(probe_mode)),time_wait);
 
     if(dataRecieved==true){
 
@@ -303,10 +311,12 @@ void loop() {
     ppm_MQ4_average=0;
     ppm_MQ137_average=0;
     ppm_MQ136_average=0;
+    ppm_MG811_average=0;
 
     ppm_MQ4=0;
     ppm_MQ136=0;
     ppm_MQ137=0;
+    ppm_MG811=0;
 
 
     sample_counter=0;

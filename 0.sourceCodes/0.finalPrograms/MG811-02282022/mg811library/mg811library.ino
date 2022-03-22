@@ -18,7 +18,7 @@ void setup() {
 }
 
 void loop() {
-  int val = co2Sensor.read();
+  float val = co2Sensor.read();
   Serial.print("CO2 value: ");
   Serial.println(val);
 
