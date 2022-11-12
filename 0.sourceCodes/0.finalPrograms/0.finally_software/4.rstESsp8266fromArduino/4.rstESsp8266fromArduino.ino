@@ -37,7 +37,7 @@
 
   /* set period to send data in seconds*/
   //int period_send_data=900;
-  int period_send_data=20;
+  int period_send_data=20;// 20 seconds
   volatile boolean send_data=false;
 
   /* amount of sample before send data*/
@@ -122,7 +122,7 @@ void setup() {
    /*
     * Timer1 can accept a minimum period of 1 microsecond and a maximum period of 8388480 microseconds (about 8.3 seconds).
     */
-   Timer1.initialize(interruption_period*1000000); //interrupiton will happen each 8 seconds
+   Timer1.initialize(interruption_period*1000000); //interrupiton will happen each 5 seconds
    Timer1.attachInterrupt(interruptionFunction);
 
    // Set diodes to alert when something is wrong
@@ -163,8 +163,17 @@ void loop() {
 
     if(dht.readHumidity()!=NULL || dht.readHumidity()!=NULL){
       sample_counter++;
-      h = dht.readHumidity()+h;// Lee la humedad
-      t= dht.readTemperature()+t;//Lee la temperatura
+      
+      h = dht.readHumidity() + h;// Lee la humedad  accumulator 
+      t= dht.readTemperature() + t;//Lee la temperatura  accumulator 
+
+       /* to send only the value instead of the average
+         h = dht.readHumidity();// Lee la humedad   
+         t= dht.readTemperature();//Lee la temperatura 
+
+       */
+
+      
       
       //Serial.println("temperaTura: "+String( dht.readTemperature()));// ** just for test
       //Serial.flush();// ** just for test
@@ -176,10 +185,17 @@ void loop() {
       MQ137_values =findRs(analogRead(A3), 5.0, 47.0);
       MQ136_values =findRs(analogRead(A1), 5.0, 20.0);
 
-      ppm_MQ4= find_ppm(MQ4_values.Ro, MQ4_values.Rs, chartValues_MQ4.m, chartValues_MQ4.b )+ppm_MQ4;
-      ppm_MQ137= find_ppm(MQ137_values.Ro, MQ137_values.Rs, chartValues_MQ137.m,chartValues_MQ137.b)+ppm_MQ137;
-      ppm_MQ136= find_ppm(MQ136_values.Ro, MQ136_values.Rs, chartValues_MQ136.m,chartValues_MQ136.b)+ppm_MQ136;
-      ppm_MG811=float(co2Sensor.read())+ppm_MG811;
+      ppm_MQ4= find_ppm(MQ4_values.Ro, MQ4_values.Rs, chartValues_MQ4.m, chartValues_MQ4.b ) + ppm_MQ4; // accumulator 
+      ppm_MQ137= find_ppm(MQ137_values.Ro, MQ137_values.Rs, chartValues_MQ137.m,chartValues_MQ137.b) + ppm_MQ137; // accumulator
+      ppm_MQ136= find_ppm(MQ136_values.Ro, MQ136_values.Rs, chartValues_MQ136.m,chartValues_MQ136.b) + ppm_MQ136; // accumulator
+      ppm_MG811=float(co2Sensor.read())+ppm_MG811;// accumulator
+
+      /* to send only the value instead of the average
+      ppm_MQ4= find_ppm(MQ4_values.Ro, MQ4_values.Rs, chartValues_MQ4.m, chartValues_MQ4.b );  // 
+      ppm_MQ137= find_ppm(MQ137_values.Ro, MQ137_values.Rs, chartValues_MQ137.m,chartValues_MQ137.b);//
+      ppm_MQ136= find_ppm(MQ136_values.Ro, MQ136_values.Rs, chartValues_MQ136.m,chartValues_MQ136.b);//
+      ppm_MG811=float(co2Sensor.read());//
+       */
 
       
 
@@ -207,8 +223,6 @@ void loop() {
 
 
 
-
-
    if(send_data==true && sample_counter!=0){
 
     //In this part we will have to use the **sample_counter** to calculate the average and then we will have to set with 0
@@ -223,12 +237,17 @@ void loop() {
    ppm_MQ137_average=ppm_MQ137/sample_counter;
    ppm_MG811_average=ppm_MG811/sample_counter;
 
-   //Serial.println("Average Temperature: "+String(average_temp));// ** just for test
-   //Serial.flush();// ** just for test
+      /* to send only the value instead of the average
+       *  
+       *     average_temp=t;
+             average_hume=h;
+             ppm_MQ4_average=ppm_MQ4;
+             ppm_MQ136_average=ppm_MQ136;
+             ppm_MQ137_average=ppm_MQ137;
+             ppm_MG811_average=ppm_MG811;
+       */
 
-   //Serial.println("Average humedity: "+String(average_hume));// ** just for test
-   //Serial.flush();// ** just for test
-
+  
 
     delay(250);
     resetESP8266(RST, GPIO0, GPIO2);
