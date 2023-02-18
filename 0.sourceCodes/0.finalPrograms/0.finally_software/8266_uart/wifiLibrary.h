@@ -34,6 +34,9 @@ boolean connectToWifiNetwork(String wifiNetworkName, String password){
 
      String queryString = "?Authorization="+String("holi")+String(dataSensors);
 
+     //serverName="https://web-production-3b82d.up.railway.app/";/***/
+     //port=443;/***/
+
      //String queryString=value;
      if (client.connect(serverName, port)) {
 

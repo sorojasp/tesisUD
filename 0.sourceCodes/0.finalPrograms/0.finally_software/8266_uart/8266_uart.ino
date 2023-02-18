@@ -8,10 +8,11 @@
 
 int GPIO2=2;
 int GPIO0=0;
-char ssid[] = "Ingnovatech";          //  your network SSID (name) "stiven"
-char password[] = "recyapp2021";     //"nqbq5081"
-char servername[]="odor-sr7.herokuapp.com";
-char endPoint[]="/gasConcentrations";
+char ssid[] = "Ingnovatech";          //  your network SSID (name) "stiven" "Ingnovatech 5G"
+char password[] = "recyapp2021";     //"nqbq5081" "recyapp2021"
+char servername[]="web-production-3b82d.up.railway.app";
+char endPoint[]="gasConcentrations";
+
 
 
 
@@ -38,7 +39,7 @@ void setup() {
 
       if(connectToWifiNetwork(String(ssid), String(password))){
                WiFiClient client;
-               sendSensorData(String(servername), String(endPoint), 80, sensor_data1+sensor_data2, client);
+               sendSensorData(String(servername), String(endPoint), 443, sensor_data1+sensor_data2, client);
                }
 
                delay(100);
