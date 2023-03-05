@@ -104,4 +104,5 @@ String recieveData(unsigned long time_wait){
       }
   
   }
+  return "";
 }
