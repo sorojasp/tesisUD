@@ -32,21 +32,20 @@
   const byte probe_mode = 6;
 
   /*set period of interruption and period to take a sample*/
-  int interruption_period=5; // 5 seconds -- MAX VALUE 8 that means 8 seconds
+  int interruption_period=5; // 5 seconds;
   volatile boolean take_sample=false;
 
   /* set period to send data in seconds*/
   //int period_send_data=900;
-  int sample_period=120;// 120 seconds ---2 min
+  int period_send_data=20;// 20 seconds
   volatile boolean send_data=false;
-  
-  /*Amount of steps before  the system takes the sample and send*/
-  volatile int  steps_amount=sample_period/interruption_period;
-  
-  volatile int  steps_counter=0;
+
+  /* amount of sample before send data*/
+  volatile int  amount_samples=period_send_data/interruption_period;
 
 
-
+  volatile int counter=0;
+  int sample_counter=0;
 
 
   /*Set of DHT11*/
@@ -60,7 +59,8 @@
    int h=0;
    int t=0;
 
-
+   float average_temp=0;
+   float average_hume=0;
 
 
    /*Set variables to get gas concentrations */
@@ -88,7 +88,11 @@
    
      
 
- 
+   float ppm_MQ4_average=0;
+   float ppm_MQ137_average=0;
+   float ppm_MQ136_average=0;
+   float ppm_MG811_average=0;
+
 
 
    /**Import library to read the data of pppm from MG811 sensor**/
@@ -152,34 +156,47 @@ void loop() {
    
 
     Timer1.stop();
-
-
-    //**Only to make the test
-    //MQ136_values =findRs(analogRead(A1), 5.0, 20.0);
-    //ppm_MQ136= find_ppm(MQ136_values.Ro, MQ136_values.Rs, chartValues_MQ136.m,chartValues_MQ136.b); //
-    //**Finish Only to make the test
-    
     
     
     //Serial.println("take_sample");// ** just for test
     //Serial.flush();// ** just for test
 
     if(dht.readHumidity()!=NULL || dht.readHumidity()!=NULL){
+      sample_counter++;
       
-      
-      h = dht.readHumidity();// Lee la humedad  accumulator 
-      t= dht.readTemperature();//Lee la temperatura  accumulator 
+      h = dht.readHumidity() + h;// Lee la humedad  accumulator 
+      t= dht.readTemperature() + t;//Lee la temperatura  accumulator 
 
+       /* to send only the value instead of the average
+         h = dht.readHumidity();// Lee la humedad   
+         t= dht.readTemperature();//Lee la temperatura 
+
+       */
+
+      
+      
+      //Serial.println("temperaTura: "+String( dht.readTemperature()));// ** just for test
+      //Serial.flush();// ** just for test
+      
+      //Serial.println("humedity: "+String(dht.readHumidity()));// ** just for test
+      //Serial.flush();// ** just for test
 
       MQ4_values = findRs(analogRead(A2), 5.0, 20.0);
       MQ137_values =findRs(analogRead(A3), 5.0, 47.0);
       MQ136_values =findRs(analogRead(A1), 5.0, 20.0);
 
-      ppm_MQ4= find_ppm(MQ4_values.Ro, MQ4_values.Rs, chartValues_MQ4.m, chartValues_MQ4.b ); //  
-      ppm_MQ137= find_ppm(MQ137_values.Ro, MQ137_values.Rs, chartValues_MQ137.m,chartValues_MQ137.b); //
-      ppm_MQ136= find_ppm(MQ136_values.Ro, MQ136_values.Rs, chartValues_MQ136.m,chartValues_MQ136.b); //
-      ppm_MG811=float(co2Sensor.read());
-  
+      ppm_MQ4= find_ppm(MQ4_values.Ro, MQ4_values.Rs, chartValues_MQ4.m, chartValues_MQ4.b ) + ppm_MQ4; // accumulator 
+      ppm_MQ137= find_ppm(MQ137_values.Ro, MQ137_values.Rs, chartValues_MQ137.m,chartValues_MQ137.b) + ppm_MQ137; // accumulator
+      ppm_MQ136= find_ppm(MQ136_values.Ro, MQ136_values.Rs, chartValues_MQ136.m,chartValues_MQ136.b) + ppm_MQ136; // accumulator
+      ppm_MG811=float(co2Sensor.read())+ppm_MG811;// accumulator
+
+      /* to send only the value instead of the average
+      ppm_MQ4= find_ppm(MQ4_values.Ro, MQ4_values.Rs, chartValues_MQ4.m, chartValues_MQ4.b );  // 
+      ppm_MQ137= find_ppm(MQ137_values.Ro, MQ137_values.Rs, chartValues_MQ137.m,chartValues_MQ137.b);//
+      ppm_MQ136= find_ppm(MQ136_values.Ro, MQ136_values.Rs, chartValues_MQ136.m,chartValues_MQ136.b);//
+      ppm_MG811=float(co2Sensor.read());//
+       */
+
       
 
       digitalWrite(is_ok,HIGH);
@@ -198,31 +215,39 @@ void loop() {
         
         }
 
-      
-
-        //Timer1.start();
-        take_sample = false;
-        send_data=true;
+        Timer1.start();
+       take_sample = false;
 
    
   }
 
 
-   if(send_data==true){
+
+   if(send_data==true && sample_counter!=0){
 
     //In this part we will have to use the **sample_counter** to calculate the average and then we will have to set with 0
 
-    
-    //**Only to make the test
-    //Serial.println("send data");// ** just for test
-    //Serial.println(String(ppm_MQ136));// 
-    //Serial.flush();// ** just for test
-    //**Finish Only to make the test
 
+    Timer1.stop();
 
-    
+   average_temp=t/sample_counter;
+   average_hume=h/sample_counter;
+   ppm_MQ4_average=ppm_MQ4/sample_counter;
+   ppm_MQ136_average=ppm_MQ136/sample_counter;
+   ppm_MQ137_average=ppm_MQ137/sample_counter;
+   ppm_MG811_average=ppm_MG811/sample_counter;
 
+      /* to send only the value instead of the average
+       *  
+       *     average_temp=t;
+             average_hume=h;
+             ppm_MQ4_average=ppm_MQ4;
+             ppm_MQ136_average=ppm_MQ136;
+             ppm_MQ137_average=ppm_MQ137;
+             ppm_MG811_average=ppm_MG811;
+       */
 
+  
 
     delay(250);
     resetESP8266(RST, GPIO0, GPIO2);
@@ -235,16 +260,19 @@ void loop() {
 
     unsigned long time_wait=10000;
 
-    boolean dataRecieved= sendData(2, "&A="+String(ppm_MQ137)+"&B="+String(ppm_MG811)+"&C="+String(ppm_MQ4)+String("&H=4.697540")+"&probe_mode="+String(digitalRead(probe_mode)),time_wait);
+    boolean dataRecieved= sendData(2, "&A="+String(ppm_MQ137_average)+"&B="+String(ppm_MG811_average)+"&C="+String(ppm_MQ4_average)+String("&H=4.697540")+"&probe_mode="+String(digitalRead(probe_mode)),time_wait);
 
     if(dataRecieved==true){
 
       digitalWrite(is_ok,HIGH);
       digitalWrite(present_errors,LOW);
 
-     delay(200);
+      //Serial.println("data Recieved =)");// ** just for test
+      //Serial.flush();// ** just for test
 
-      dataRecieved= sendData(2, "&D="+String(ppm_MQ136)+"&E=236.88&F="+String(t)+"&G="+String(h)+String("&I=-74.114441"),time_wait);
+      delay(200);
+
+      dataRecieved= sendData(2, "&D="+String(ppm_MQ136_average)+"&E=236.88&F="+String(average_temp)+"&G="+String(average_hume)+String("&I=-74.114441"),time_wait);
 
       if(dataRecieved==true){
         digitalWrite(is_ok,HIGH);
@@ -291,16 +319,26 @@ void loop() {
 
         }
 
-        
 
 
 
+    average_temp=0;
+    average_hume=0;
+    t=0;
+    h=0;
+    
+    ppm_MQ4_average=0;
+    ppm_MQ137_average=0;
+    ppm_MQ136_average=0;
+    ppm_MG811_average=0;
 
-  
+    ppm_MQ4=0;
+    ppm_MQ136=0;
+    ppm_MQ137=0;
+    ppm_MG811=0;
 
 
-
-    steps_counter=0;
+    sample_counter=0;
     send_data=false;
 
     Timer1.start();
@@ -314,11 +352,11 @@ void loop() {
 
     void interruptionFunction(){
 
-      
-      steps_counter++;
-      if(steps_counter>=steps_amount){
-        steps_counter=0;
-        take_sample=true;
+      take_sample=true;
+      counter++;
+      if(counter>=amount_samples){
+        counter=0;
+        send_data=true;
       }
 
     }
