@@ -37,7 +37,7 @@
 
   /* set period to send data in seconds*/
   //int period_send_data=900;
-  int sample_period=120;// 120 seconds ---2 min
+  int sample_period=10;// 10 seconds ---2 min
   volatile boolean send_data=false;
   
   /*Amount of steps before  the system takes the sample and send*/
@@ -165,11 +165,11 @@ void loop() {
     //Serial.println("take_sample");// ** just for test
     //Serial.flush();// ** just for test
 
-    if(dht.readHumidity()!=NULL || dht.readHumidity()!=NULL){
+
       
       
-      h = dht.readHumidity();// Lee la humedad  accumulator 
-      t= dht.readTemperature();//Lee la temperatura  accumulator 
+      //h = dht.readHumidity();// Lee la humedad  accumulator 
+      //t= dht.readTemperature();//Lee la temperatura  accumulator 
 
 
       MQ4_values = findRs(analogRead(A2), 5.0, 20.0);
@@ -187,17 +187,7 @@ void loop() {
       digitalWrite(present_errors,LOW);
 
 
-      }else{
-
-        //Serial.println("Invalid value");
-        //Serial.flush();
-
-        digitalWrite(is_ok,LOW);
-        digitalWrite(present_errors,HIGH);
-
-        
-        
-        }
+    
 
       
 
@@ -213,92 +203,15 @@ void loop() {
 
     //In this part we will have to use the **sample_counter** to calculate the average and then we will have to set with 0
 
-    
-    //**Only to make the test
-    //Serial.println("send data");// ** just for test
-    //Serial.println(String(ppm_MQ136));// 
-    //Serial.flush();// ** just for test
-    //**Finish Only to make the test
 
-
-    
-
-
-
-    delay(250);
-    resetESP8266(RST, GPIO0, GPIO2);
-    delay(250);// this value con not be less than 200
-
-
-    String incomingString;
-
+ 
+ 
     Serial1_flush_buffer();// ** important because clear the serial port after recieve the junk from ESP8266-01
 
     unsigned long time_wait=10000;
 
-    boolean dataRecieved= sendData(2, "&A="+String(ppm_MQ137)+"&B="+String(ppm_MG811)+"&C="+String(ppm_MQ4)+String("&H=4.697540")+"&probe_mode="+String(digitalRead(probe_mode)),time_wait);
-
-    if(dataRecieved==true){
-
-      digitalWrite(is_ok,HIGH);
-      digitalWrite(present_errors,LOW);
-
-     delay(200);
-
-      dataRecieved= sendData(2, "&D="+String(ppm_MQ136)+"&E=236.88&F="+String(t)+"&G="+String(h)+String("&I=-74.114441"),time_wait);
-
-      if(dataRecieved==true){
-        digitalWrite(is_ok,HIGH);
-        digitalWrite(present_errors,LOW);
-
-        String data_to_server= recieveData(time_wait);
-        //Serial.println(data_to_server);// ** just for test
-        //Serial.flush();// ** just for test
-
-        if(data_to_server=="data sended to server =)"){
-          digitalWrite(is_ok,HIGH);
-          digitalWrite(present_errors,LOW);
-          
-          }else{
-            digitalWrite(is_ok,LOW);
-           digitalWrite(present_errors,HIGH);
-            
-            
-            }
-
-
-
-        }else{
-
-          digitalWrite(is_ok,LOW);
-          digitalWrite(present_errors,HIGH);
-
-         //Serial.println("**  Error to send data 2 not  Recieved =(");// ** just for test
-         //Serial.flush();
-
-          }
-
-
-      }else{
-
-
-       digitalWrite(is_ok,LOW);
-       digitalWrite(present_errors,HIGH);
-
-        //Serial.println("**  Error data not  Recieved =(");
-        //Serial.flush();
-
-
-
-        }
-
-        
-
-
-
-
-  
-
+    Serial.println("&A="+String(ppm_MQ137)+"&B="+String(ppm_MG811)+"&C="+String(ppm_MQ4)+String("&H=4.697540")+"&probe_mode="+String(digitalRead(probe_mode)));
+    Serial.println("&D="+String(ppm_MQ136)+"&E=236.88&F="+String(t)+"&G="+String(h)+String("&I=-74.114441"));
 
 
     steps_counter=0;
