@@ -73,6 +73,11 @@
    ChartValues chartValues_MQ137=find_m_b(40.0,1.0,100.0,0.8,70.0,0.75);
    ChartValues chartValues_MQ136=find_m_b(50.0,0.21,110.0,0.15,100,0.175);
 
+   float RL_MQ136=4.7;
+   float RL_MQ137=47.0;
+   float RL_MQ4=20;
+   float reference_voltage=4.7;
+
    
    float analog_value_MQ4;
    float analog_value_MQ137;
@@ -172,9 +177,10 @@ void loop() {
       //t= dht.readTemperature();//Lee la temperatura  accumulator 
 
 
-      MQ4_values = findRs(analogRead(A2), 5.0, 20.0);
-      MQ137_values =findRs(analogRead(A3), 5.0, 47.0);
-      MQ136_values =findRs(analogRead(A1), 5.0, 20.0);
+      MQ4_values = findRs(analogRead(A2), reference_voltage, RL_MQ4);
+      MQ137_values =findRs(analogRead(A3), reference_voltage, RL_MQ137);
+      MQ136_values =findRs(analogRead(A1), reference_voltage, RL_MQ136);
+
 
       ppm_MQ4= find_ppm(MQ4_values.Ro, MQ4_values.Rs, chartValues_MQ4.m, chartValues_MQ4.b ); //  
       ppm_MQ137= find_ppm(MQ137_values.Ro, MQ137_values.Rs, chartValues_MQ137.m,chartValues_MQ137.b); //
