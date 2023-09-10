@@ -8,7 +8,7 @@
 
 int GPIO2=2;
 int GPIO0=0;
-char ssid[] = "Ingnovatech";          //  your network SSID (name) "stiven" "Ingnovatech 5G"
+char ssid[] = "Ingnovatech";          //  your network SSID (name) "stiven" "Ingnovatech 5G"   "sr7network"
 char password[] = "recyapp2021";     //"nqbq5081" "recyapp2021"
 char servername[]="odor-sr7.herokuapp.com";
 char endPoint[]="/gasConcentrations";

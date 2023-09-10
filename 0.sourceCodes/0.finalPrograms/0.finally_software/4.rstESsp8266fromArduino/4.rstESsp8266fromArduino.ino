@@ -37,7 +37,7 @@
 
   /* set period to send data in seconds*/
   //int period_send_data=900;
-  int sample_period=120;// 120 seconds ---2 min
+  int sample_period=30;// 120 seconds ---2 min
   volatile boolean send_data=false;
   
   /*Amount of steps before  the system takes the sample and send*/

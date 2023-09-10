@@ -66,7 +66,7 @@
    /*Set variables to get gas concentrations */
    
    float k_MQ4 = 4.4;//constant
-   float k_MQ137 = 1;//constant
+   float k_MQ137 = 3.6;//constant
    float k_MQ136 = 1;//constant
 
    ChartValues chartValues_MQ4=find_m_b(200.0,1.8,1000.0,1.0,500.0,1.4);
@@ -76,7 +76,7 @@
    float RL_MQ136=4.7;
    float RL_MQ137=47.0;
    float RL_MQ4=20;
-   float reference_voltage=4.7;
+   float reference_voltage=5;
 
    
    float analog_value_MQ4;
@@ -134,9 +134,9 @@ void setup() {
 
    /*Set Ro for each sensor*/
 
-    MQ4_values.Ro=37.39;
-    MQ137_values.Ro=155.74;
-    MQ136_values.Ro=87.92;
+    MQ4_values.Ro=5.35;
+    MQ137_values.Ro=132.51;
+    MQ136_values.Ro=95.47;
 
 
 
