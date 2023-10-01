@@ -9,7 +9,7 @@ SensorValues findRs(float adc, float Vs, float RL){
      * to calibrate the sensor
     */
     SensorValues sensorValues;
-    sensorValues.VRL= (5.0*(float)adc)/(float)1023.0;
+    sensorValues.VRL= (Vs*(float)adc)/(float)1023.0;
     sensorValues.Rs=((Vs/sensorValues.VRL)-1)* RL;
     return sensorValues;
 
